@@ -5,9 +5,11 @@ interface User {
 }
 
 const user: User = {
-  email: "user@domain.com",
-  username: "user",
-  password: "secret"
+  email: 'user@domain.com',
+  username: 'user',
+  password: 'secret'
 }
 
-console.log("[AnimeList v0.1.0]")
+console.log('[AnimeList v0.1.0]')
+
+console.table(user)
