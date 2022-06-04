@@ -1,6 +1,9 @@
 ### NodeJS ###
 node_modules
 
+### TypeScript ###
+build
+
 ### DotENV ###
 .env
 .env.development.local
