@@ -1,13 +1,13 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
+
+import router from './router'
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (_req: Request, res: Response) => {
-  res.status(200).json({ message: 'Anime List', version: '0.1.0' })
-})
+app.use('/', router)
 
 const port = process.env.PORT || 3000
 
