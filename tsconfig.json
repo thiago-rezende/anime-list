@@ -16,7 +16,8 @@
       "@config/*": ["./src/config/*"],
       "@routes/*": ["./src/routes/*"],
       "@models/*": ["./src/models/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@views/*": ["./src/views/*"]
     },
     "resolveJsonModule": true,                           /* Enable importing .json files. */
 
