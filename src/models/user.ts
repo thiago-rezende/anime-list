@@ -1,7 +1,7 @@
 export class User {
   email: string
   username: string
-  password: string
+  password?: string
 
   constructor(email: string, username: string, password: string) {
     this.email = email

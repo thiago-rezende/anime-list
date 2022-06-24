@@ -28,6 +28,9 @@
       ],
       "@views/*": [
         "./src/views/*"
+      ],
+      "@middlewares/*": [
+        "./src/middlewares/*"
       ]
     },
     "resolveJsonModule": true,
