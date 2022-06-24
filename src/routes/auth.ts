@@ -15,7 +15,6 @@ auth.get('/me', (req: Request, res: Response) => {
 
   if (token) {
     const payload = getJwtPayload(token)
-    console.log(payload)
 
     const user = database.users.find((user) => {
       return user.username === payload.user.username && user.email === payload.user.email
