@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 
 import database from '@database/index'
+
 import { usersView } from '@views/users'
 
 const users = Router()
