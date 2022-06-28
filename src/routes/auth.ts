@@ -10,6 +10,23 @@ const auth = Router()
 
 type AuthRequestBody = { user: { email: string, password: string } }
 
+auth.post('/', (req: Request<{}, {}, AuthRequestBody>, res: Response) => {
+  const email = req.body.user.email
+  const password = req.body.user.password
+
+  const user = database.users.find((user) => {
+    return user.email === email && user.password === password
+  })
+
+  if (user === undefined) { return res.status(401).json({ message: 'invalid credentials' }) }
+
+  const token = createJwt(user)
+
+  res.set('Authorization', token)
+
+  return res.status(200).json({ token })
+})
+
 auth.get('/me', (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(' ')[1]
 
@@ -26,21 +43,6 @@ auth.get('/me', (req: Request, res: Response) => {
   }
 
   return res.status(401).json({ message: 'unauthorized' })
-})
-
-auth.post('/', (req: Request<{}, {}, AuthRequestBody>, res: Response) => {
-  const email = req.body.user.email
-  const password = req.body.user.password
-
-  const user = database.users.find((user) => {
-    return user.email === email && user.password === password
-  })
-
-  if (user === undefined) { return res.status(401).json({ message: 'invalid credentials' }) }
-
-  const token = createJwt(user)
-
-  return res.status(200).json({ token })
 })
 
 export default auth

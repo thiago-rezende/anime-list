@@ -1,11 +1,11 @@
 import users from '@database/users'
 import { User } from '@models/user'
 
-interface IDatabase {
+interface Database {
   users: Array<User>
 }
 
-const database: IDatabase = {
+const database: Database = {
   users
 }
 

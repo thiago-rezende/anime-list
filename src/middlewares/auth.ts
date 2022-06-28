@@ -11,7 +11,9 @@ const authMiddleware = function (req: Request, res: Response, next: NextFunction
   try {
     const token = req.headers.authorization.split(' ')[1]
 
-    validateJwt(token)
+    const payload = validateJwt(token)
+
+    req.user = payload.user
 
     next()
   } catch (err) {

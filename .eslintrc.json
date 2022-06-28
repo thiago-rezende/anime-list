@@ -27,5 +27,8 @@
         "node": true
       }
     }
+  ],
+  "ignorePatterns": [
+    "**/*.d.ts"
   ]
 }

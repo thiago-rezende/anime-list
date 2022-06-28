@@ -22,8 +22,8 @@ export function createJwt(user: User): string {
   return token
 }
 
-export function validateJwt(token: string) {
-  jwt.verify(token, publicKey)
+export function validateJwt(token: string): JwtPayload {
+  return (jwt.verify(token, publicKey) as JwtPayload)
 }
 
 export function getJwtPayload(token: string): JwtPayload {
