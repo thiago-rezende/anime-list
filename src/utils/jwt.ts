@@ -10,7 +10,7 @@ const publicKey = readFileSync('certs/jwtRS256.pem')
 export function createJwt(user: User): string {
   const token = jwt.sign({
     user: userView(user)
-  }, privateKey, {
+  }, { key: privateKey, passphrase: process.env.PASSPHRASE || 'secret' }, {
     algorithm: 'RS256',
     expiresIn: '2h'
   })
