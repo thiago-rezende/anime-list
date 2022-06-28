@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs'
-
 import config from '@config/index'
 
 import { User } from '@models/user'
@@ -7,24 +5,21 @@ import { userView } from '@views/users'
 
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
-const privateKey = readFileSync('certs/jwtRS256.key')
-const publicKey = readFileSync('certs/jwtRS256.pem')
-
 export function createJwt(user: User): string {
   const payload: JwtPayload = {
     user: userView(user)
   }
 
-  const accessToken = jwt.sign(payload, { key: privateKey, passphrase: config.env.passphrase }, {
-    algorithm: 'RS256',
-    expiresIn: '2h'
+  const accessToken = jwt.sign(payload, { key: config.jwt.privateKey, passphrase: config.jwt.passphrase }, {
+    algorithm: config.jwt.algorithm,
+    expiresIn: config.jwt.expiresIn
   })
 
   return accessToken
 }
 
 export function validateJwt(accessToken: string): JwtPayload {
-  return (jwt.verify(accessToken, publicKey) as JwtPayload)
+  return (jwt.verify(accessToken, config.jwt.publicKey) as JwtPayload)
 }
 
 export function getJwtPayload(accessToken: string): JwtPayload {

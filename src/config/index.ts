@@ -1,7 +1,14 @@
-import env from '@config/environment'
+import env, { EnvironmentConfig } from '@config/environment'
+import jwt, { JwtConfig } from '@config/jwt'
 
-const config = {
-  env
+export interface Config {
+  env: EnvironmentConfig,
+  jwt: JwtConfig
+}
+
+const config: Config = {
+  env,
+  jwt
 }
 
 export default config
