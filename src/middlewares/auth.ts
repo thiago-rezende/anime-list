@@ -1,16 +1,18 @@
 import { validateJwt } from '@utils/jwt'
 import { Request, Response, NextFunction } from 'express'
 
-const authMiddleware = function (req: Request, res: Response, next: NextFunction) {
+import { AuthorizationError } from '@errors/auth'
+
+const authMiddleware = function (req: Request, _res: Response, next: NextFunction) {
   if (req.path === '/auth') return next()
 
   if (!req.headers.authorization) {
-    return res.status(401).json({ message: 'unauthorized' })
+    throw new AuthorizationError('unauthorized')
   }
 
-  const token = req.headers.authorization.split(' ')[1]
+  const accessToken = req.headers.authorization.split(' ')[1]
 
-  const payload = validateJwt(token)
+  const payload = validateJwt(accessToken)
 
   req.user = payload.user
 

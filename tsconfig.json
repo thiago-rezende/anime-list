@@ -18,6 +18,9 @@
       "@database/*": [
         "./src/database/*"
       ],
+      "@errors/*": [
+        "./src/errors/*"
+      ],
       "@config/*": [
         "./src/config/*"
       ],
