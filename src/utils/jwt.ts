@@ -7,10 +7,6 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 const privateKey = readFileSync('certs/jwtRS256.key')
 const publicKey = readFileSync('certs/jwtRS256.pem')
 
-// interface JwtPayload {
-//   user: User
-// }
-
 export function createJwt(user: User): string {
   const token = jwt.sign({
     user: userView(user)

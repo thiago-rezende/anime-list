@@ -1,5 +1,7 @@
 import express from 'express'
-import authMiddleware from './middlewares/auth'
+
+import authMiddleware from '@middlewares/auth'
+import errorMiddleware from '@middlewares/error'
 
 import router from './router'
 
@@ -11,6 +13,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(authMiddleware)
 
 app.use('/', router)
+
+app.use(errorMiddleware)
 
 const port = process.env.PORT || 3000
 
