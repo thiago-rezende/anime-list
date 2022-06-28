@@ -1,0 +1,27 @@
+version: "3.8"
+
+x-logging:
+  &default-logging
+  driver: json-file
+  options:
+    max-size: "100k"
+    max-file: "1"
+
+networks:
+  shared-services:
+    external: true
+
+services:
+  anime-list:
+    build:
+      context: .
+    user: 1000:1000
+    environment:
+      - WATCH_FILES=${WATCH_FILES}
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+    volumes:
+      - ".:/application"
+    logging: *default-logging
+    networks:
+      - shared-services
