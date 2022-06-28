@@ -25,6 +25,15 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
     })
   }
 
+  if (err && err.name === 'InvalidCredentialsError') {
+    return res.status(401).json({
+      error: {
+        message: err.message,
+        name: err.name
+      }
+    })
+  }
+
   if (err && err.name === 'UserNotFoundError') {
     return res.status(404).json({
       error: {

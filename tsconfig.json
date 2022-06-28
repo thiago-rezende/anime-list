@@ -7,44 +7,47 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "CommonJS",
-    "rootDir": "./src",
+    "rootDir": ".",
     "moduleResolution": "node",
     "typeRoots": [
       "@types",
-      "./node_modules/@types"
+      "node_modules/@types"
     ],
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
+      "@src/*": [
+        "src/*"
+      ],
       "@database/*": [
-        "./src/database/*"
+        "src/database/*"
       ],
       "@errors/*": [
-        "./src/errors/*"
+        "src/errors/*"
       ],
       "@config/*": [
-        "./src/config/*"
+        "src/config/*"
       ],
       "@routes/*": [
-        "./src/routes/*"
+        "src/routes/*"
       ],
       "@models/*": [
-        "./src/models/*"
+        "src/models/*"
       ],
       "@utils/*": [
-        "./src/utils/*"
+        "src/utils/*"
       ],
       "@views/*": [
-        "./src/views/*"
+        "src/views/*"
       ],
       "@middlewares/*": [
-        "./src/middlewares/*"
+        "src/middlewares/*"
       ]
     },
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "./build",
+    "outDir": "build",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -64,6 +67,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "src",
+    "tests"
   ]
 }

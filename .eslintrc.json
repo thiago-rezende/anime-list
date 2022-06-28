@@ -29,6 +29,6 @@
     }
   ],
   "ignorePatterns": [
-    "**/*.d.ts"
+    "@types/**/*.d.ts"
   ]
 }
