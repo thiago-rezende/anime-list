@@ -1,5 +1,7 @@
 import express from 'express'
 
+import config from './config/index'
+
 import authMiddleware from '@middlewares/auth'
 import errorMiddleware from '@middlewares/error'
 
@@ -16,6 +18,4 @@ app.use('/', router)
 
 app.use(errorMiddleware)
 
-const port = process.env.PORT || 3000
-
-app.listen(port, () => console.log(`[anime-list]: listening on port ${port}`))
+app.listen(config.env.port, () => console.log(`[anime-list]: listening on port ${config.env.port}`))

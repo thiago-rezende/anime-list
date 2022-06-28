@@ -1,5 +1,7 @@
 import { readFileSync } from 'fs'
 
+import config from '@config/index'
+
 import { User } from '@models/user'
 import { userView } from '@views/users'
 
@@ -13,7 +15,7 @@ export function createJwt(user: User): string {
     user: userView(user)
   }
 
-  const accessToken = jwt.sign(payload, { key: privateKey, passphrase: process.env.PASSPHRASE || 'secret' }, {
+  const accessToken = jwt.sign(payload, { key: privateKey, passphrase: config.env.passphrase }, {
     algorithm: 'RS256',
     expiresIn: '2h'
   })
