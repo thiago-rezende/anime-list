@@ -1,6 +1,7 @@
+import { readFileSync } from 'fs'
+
 import { User } from '@models/user'
 import { userView } from '@views/users'
-import { readFileSync } from 'fs'
 
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
@@ -27,5 +28,5 @@ export function validateJwt(accessToken: string): JwtPayload {
 export function getJwtPayload(accessToken: string): JwtPayload {
   const decoded: JwtPayload = (jwt.decode(accessToken) as JwtPayload)
 
-  return { user: { username: decoded.user.username, email: decoded.user.email } }
+  return { user: decoded.user }
 }
