@@ -2,14 +2,14 @@ import { User } from '@models/user'
 import { userView } from '@views/users'
 import { readFileSync } from 'fs'
 
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const privateKey = readFileSync('certs/jwtRS256.key')
 const publicKey = readFileSync('certs/jwtRS256.pem')
 
-interface JwtPayload {
-  user: User
-}
+// interface JwtPayload {
+//   user: User
+// }
 
 export function createJwt(user: User): string {
   const token = jwt.sign({
