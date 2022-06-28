@@ -1,8 +1,8 @@
 {
-  "name": "animelist",
+  "name": "anime-list",
   "version": "0.1.0",
   "description": "Anime listing made simple",
-  "repository": "https://github.com/thiago-rezende/animelist",
+  "repository": "https://github.com/thiago-rezende/anime-list",
   "author": "Thiago Rezende",
   "license": "BSD-3-Clause",
   "main": "index.js",
