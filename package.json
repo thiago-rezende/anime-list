@@ -10,7 +10,7 @@
   "scripts": {
     "watch": "ts-node-dev -r tsconfig-paths/register --quiet --transpile-only src/index.ts",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "lint": "eslint src/**",
+    "lint": "eslint src/**/*.ts",
     "test": "jest"
   },
   "devDependencies": {
