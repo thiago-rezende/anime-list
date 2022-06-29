@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express'
 
 import { AuthorizationError } from '@errors/auth'
 
+import { User } from '@models/user'
+
 const authMiddleware = function (req: Request, _res: Response, next: NextFunction) {
   if (req.path === '/auth') return next()
 
@@ -14,7 +16,7 @@ const authMiddleware = function (req: Request, _res: Response, next: NextFunctio
 
   const payload = validateJwt(accessToken)
 
-  req.user = payload.user
+  req.user = (payload.user as User)
 
   next()
 }

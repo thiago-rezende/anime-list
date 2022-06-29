@@ -1,11 +1,15 @@
-export class User {
-  email: string
-  username: string
-  password?: string
+import { Table, Column, Model } from 'sequelize-typescript'
 
-  constructor(email: string, username: string, password: string) {
-    this.email = email
-    this.username = username
-    this.password = password
-  }
+@Table({
+  tableName: 'users'
+})
+export class User extends Model {
+  @Column
+  declare email: string
+
+  @Column
+  declare username: string
+
+  @Column
+  declare password: string
 }

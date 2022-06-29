@@ -7,13 +7,21 @@ import router from './router'
 
 const server = express()
 
-server.use(express.json())
-server.use(express.urlencoded({ extended: true }))
+function start(port: number | string, cb: () => void) {
+  server.listen(port, cb)
+}
 
-server.use(authMiddleware)
+export default (() => {
+  server.use(express.json())
+  server.use(express.urlencoded({ extended: true }))
 
-server.use('/', router)
+  server.use(authMiddleware)
 
-server.use(errorMiddleware)
+  server.use('/', router)
 
-export default server
+  server.use(errorMiddleware)
+
+  return server
+})()
+
+export { start }

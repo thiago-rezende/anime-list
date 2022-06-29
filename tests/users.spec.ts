@@ -3,10 +3,16 @@ import request from 'supertest'
 import server from '@src/server'
 
 import database from '@database/index'
+import { users } from '@database/users'
 
-import { createJwt } from '@utils/jwt'
+import { User } from '@models/user'
 
-describe('Users v1', () => {
+describe('Users [v1]', () => {
+  beforeAll(async () => {
+    await database.sync(true)
+    database.seed()
+  })
+
   test('[GET /v1/users] unauthenticated', async () => {
     const res = await request(server).get('/v1/users')
 
@@ -15,9 +21,13 @@ describe('Users v1', () => {
   })
 
   test('[GET /v1/users] authenticated', async () => {
-    const user = database.users[0]
+    const user: User = users[0]
 
-    const accessToken = createJwt(user)
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
 
     const res = await request(server)
       .get('/v1/users')

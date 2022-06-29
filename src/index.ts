@@ -1,4 +1,11 @@
-import server from '@src/server'
+import { start } from '@src/server'
 import config from '@config/index'
 
-server.listen(config.env.port, () => console.log(`[anime-list]: listening on port ${config.env.port}`))
+import database from '@database/index'
+
+(async () => {
+  await database.sync(false)
+  database.seed()
+})()
+
+start(config.env.port, () => console.log(`[anime-list]: listening on port ${config.env.port}`))

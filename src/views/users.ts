@@ -1,6 +1,7 @@
 import { User } from '@models/user'
 
 export interface UserView {
+  id: number,
   username: string,
   email: string,
   password?: string
@@ -28,6 +29,7 @@ export function usersView(users: Array<User>, page: number, pages: number): User
 
 export function userView(user: User): UserView {
   return {
+    id: user.id,
     username: user.username,
     email: user.email
   }
