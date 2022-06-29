@@ -29,6 +29,7 @@ describe('Authentication', () => {
     const res = await request(server).get('/auth/me')
 
     expect(res.statusCode).toBe(401)
+    expect(res.body).toHaveProperty('error')
   })
 
   test('[GET /auth/me] authenticated', async () => {
