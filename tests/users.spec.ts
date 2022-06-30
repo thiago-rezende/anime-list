@@ -94,6 +94,69 @@ describe('Users [v1]', () => {
     expect(res.body).toHaveProperty('error')
   })
 
+  test('[PATCH /v1/users/:id] incorrect request body', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .patch(`/v1/users/${user.id}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+      .send({})
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+  })
+
+  test('[PATCH /v1/users/:id] unique new fields', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    let res = await request(server)
+      .patch(`/v1/users/${user.id}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+      .send({ user: { email: 'jane.doe@domain.com', username: 'jane.doe', password: 'secret' } })
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('user')
+
+    res = await request(server)
+      .patch(`/v1/users/${user.id}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+      .send({ user: { email: user.previous('email'), username: user.previous('username'), password: user.previous('password') } })
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('user')
+  })
+
+  test('[PATCH /v1/users/:id] non-unique new fields', async () => {
+    const user: User = users[0]
+    const otherUser: User = users[1]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .patch(`/v1/users/${user.id}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+      .send({ user: { email: otherUser.email, username: otherUser.username, password: otherUser.password } })
+
+    expect(res.statusCode).toBe(409)
+    expect(res.body).toHaveProperty('error')
+  })
+
   test('[DELETE /v1/users/:id] existing user', async () => {
     const user: User = users[0]
 
