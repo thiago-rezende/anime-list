@@ -1,7 +1,7 @@
 import { User } from '@models/user'
 
 export interface UserView {
-  id: number,
+  id: string,
   username: string,
   email: string,
   password?: string
