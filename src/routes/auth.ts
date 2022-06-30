@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 
 import { userView } from '@views/users'
 
@@ -12,37 +12,15 @@ const auth = Router()
 
 type AuthRequestBody = { user: { email: string, password: string } }
 
-auth.post('/', async (req: Request<{}, {}, AuthRequestBody>, res: Response) => {
+auth.post('/', async (req: Request<{}, {}, AuthRequestBody>, res: Response, next: NextFunction) => {
   const email = req.body.user.email
   const password = req.body.user.password
 
   const user = await User.findOne({ where: { email } })
 
-  /**
-   * TODO: move error handling to error middleware
-   */
-  if (!user) {
-    const err = new UserNotFoundError('user not found')
-    return res.status(404).json({
-      error: {
-        message: err.message,
-        name: err.name
-      }
-    })
-  }
+  if (!user) return next(new UserNotFoundError('user not found'))
 
-  /**
-   * TODO: move error handling to error middleware
-   */
-  if (user.password !== password) {
-    const err = new InvalidCredentialsError('invalid credentials')
-    return res.status(401).json({
-      error: {
-        message: err.message,
-        name: err.name
-      }
-    })
-  }
+  if (user.password !== password) return next(new InvalidCredentialsError('invalid credentials'))
 
   const accessToken = createJwt(user)
 
@@ -51,7 +29,7 @@ auth.post('/', async (req: Request<{}, {}, AuthRequestBody>, res: Response) => {
   return res.status(200).json({ access_token: accessToken })
 })
 
-auth.get('/me', async (req: Request, res: Response) => {
+auth.get('/me', async (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.headers.authorization?.split(' ')[1]
 
   if (accessToken) {
@@ -59,12 +37,12 @@ auth.get('/me', async (req: Request, res: Response) => {
 
     const user = await User.findOne({ where: { id: payload.user.id } })
 
-    if (!user) throw new UserNotFoundError('user not found')
+    if (!user) return next(new UserNotFoundError('user not found'))
 
     return res.status(200).json({ user: userView(user) })
   }
 
-  throw new AuthorizationError('unauthorized')
+  next(new AuthorizationError('unauthorized'))
 })
 
 export default auth
