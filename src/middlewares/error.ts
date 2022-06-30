@@ -1,5 +1,5 @@
 import { InvalidAuthRequestBodyError } from '@errors/auth'
-import { InvalidCreateUserRequestBodyError, UserCreationError } from '@errors/user'
+import { InvalidCreateUserRequestBodyError, InvalidUpdateUserRequestBodyError, UserCreationError, UserUpdateError } from '@errors/user'
 import { Request, Response, NextFunction } from 'express'
 
 import { TokenExpiredError } from 'jsonwebtoken'
@@ -47,11 +47,31 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
     })
   }
 
+  if (err && err.name === 'InvalidUpdateUserRequestBodyError') {
+    return res.status(400).json({
+      error: {
+        message: err.message,
+        fields: (err as InvalidUpdateUserRequestBodyError).fields,
+        name: err.name
+      }
+    })
+  }
+
   if (err && err.name === 'UserCreationError') {
     return res.status(409).json({
       error: {
         message: err.message,
         fields: (err as UserCreationError).fields,
+        name: err.name
+      }
+    })
+  }
+
+  if (err && err.name === 'UserUpdateError') {
+    return res.status(409).json({
+      error: {
+        message: err.message,
+        fields: (err as UserUpdateError).fields,
         name: err.name
       }
     })

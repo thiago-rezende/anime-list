@@ -1,5 +1,5 @@
 import { User, UserDTO } from '@models/user'
-import { UserCreationError, UserNotFoundError } from '@errors/user'
+import { UserCreationError, UserNotFoundError, UserUpdateError } from '@errors/user'
 
 import { ValidationError } from 'sequelize/types'
 
@@ -44,7 +44,19 @@ export async function updateUser(id: string, data: UserDTO): Promise<UserNotFoun
   if (username) user.username = username
   if (password) user.password = password
 
-  await user.save()
+  try {
+    await user.save()
+  } catch (err) {
+    const userUpdateError = new UserUpdateError('failed on user creation', [])
+
+    const validationError = (err as ValidationError)
+
+    validationError.errors.forEach(error => {
+      userUpdateError.fields.push({ field: error.path as string, description: error.message })
+    })
+
+    return userUpdateError
+  }
 
   return user
 }

@@ -19,6 +19,17 @@ export class UserCreationError extends Error {
   }
 }
 
+export class UserUpdateError extends Error {
+  fields: Array<Field>
+
+  constructor(message: string, fields: Array<Field>) {
+    super(message)
+
+    this.fields = fields
+    this.name = 'UserUpdateError'
+  }
+}
+
 export class InvalidCreateUserRequestBodyError extends Error {
   fields: Array<Field>
 
@@ -27,5 +38,16 @@ export class InvalidCreateUserRequestBodyError extends Error {
 
     this.fields = fields
     this.name = 'InvalidCreateUserRequestBodyError'
+  }
+}
+
+export class InvalidUpdateUserRequestBodyError extends Error {
+  fields: Array<Field>
+
+  constructor(message: string, fields: Array<Field>) {
+    super(message)
+
+    this.fields = fields
+    this.name = 'InvalidUpdateUserRequestBodyError'
   }
 }
