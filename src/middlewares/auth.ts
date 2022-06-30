@@ -7,6 +7,7 @@ import { User } from '@models/user'
 
 const authMiddleware = function (req: Request, _res: Response, next: NextFunction) {
   if (req.path === '/auth') return next()
+  if (req.method === 'POST' && req.path === '/v1/users') return next()
 
   if (!req.headers.authorization) return next(new AuthorizationError('unauthorized'))
 

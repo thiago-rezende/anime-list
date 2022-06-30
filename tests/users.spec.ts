@@ -36,4 +36,61 @@ describe('Users [v1]', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body).toHaveProperty('users')
   })
+
+  test('[POST /v1/users] correct request body', async () => {
+    const user: User = users[0]
+
+    const res = await request(server)
+      .post('/v1/users')
+      .send({ user: { email: user.email, username: user.username, password: user.password } })
+
+    expect(res.statusCode).toBe(409)
+    expect(res.body).toHaveProperty('error')
+  })
+
+  test('[POST /v1/users] already existing user', async () => {
+    const res = await request(server)
+      .post('/v1/users')
+      .send({ user: { email: 'jhon.doe@domain.com', username: 'jhon.doe', password: 'secret' } })
+
+    expect(res.statusCode).toBe(201)
+    expect(res.body).toHaveProperty('user')
+  })
+
+  test('[POST /v1/users] incorrect request body', async () => {
+    let res = await request(server)
+      .post('/v1/users')
+      .send({})
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/v1/users')
+      .send({ user: {} })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/v1/users')
+      .send({ user: { email: 'jhon.doe@domain.com' } })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/v1/users')
+      .send({ user: { username: 'jhon.doe' } })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/v1/users')
+      .send({ user: { password: 'secret' } })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+  })
 })

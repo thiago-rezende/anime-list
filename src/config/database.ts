@@ -8,7 +8,8 @@ const db: DBConfig = {
   database: process.env.DB_DATABASE || '',
   dialect: (process.env.DB_DIALECT as Dialect) || 'sqlite',
   storage: process.env.DB_STORAGE || ':memory:',
-  host: process.env.DB_HOST || ''
+  host: process.env.DB_HOST || '',
+  logging: false
 }
 
 export default db
