@@ -1,4 +1,5 @@
 import { InvalidAuthRequestBodyError } from '@errors/auth'
+import { InvalidCreateUserRequestBodyError, UserCreationError } from '@errors/user'
 import { Request, Response, NextFunction } from 'express'
 
 import { TokenExpiredError } from 'jsonwebtoken'
@@ -31,6 +32,26 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
       error: {
         message: err.message,
         fields: (err as InvalidAuthRequestBodyError).fields,
+        name: err.name
+      }
+    })
+  }
+
+  if (err && err.name === 'InvalidCreateUserRequestBodyError') {
+    return res.status(400).json({
+      error: {
+        message: err.message,
+        fields: (err as InvalidCreateUserRequestBodyError).fields,
+        name: err.name
+      }
+    })
+  }
+
+  if (err && err.name === 'UserCreationError') {
+    return res.status(409).json({
+      error: {
+        message: err.message,
+        fields: (err as UserCreationError).fields,
         name: err.name
       }
     })
