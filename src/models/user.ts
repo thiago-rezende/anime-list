@@ -21,3 +21,9 @@ export class User extends Model {
   @Column
   declare password: string
 }
+
+export interface UserDTO {
+  email: string,
+  username: string,
+  password: string
+}

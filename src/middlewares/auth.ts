@@ -8,9 +8,7 @@ import { User } from '@models/user'
 const authMiddleware = function (req: Request, _res: Response, next: NextFunction) {
   if (req.path === '/auth') return next()
 
-  if (!req.headers.authorization) {
-    throw new AuthorizationError('unauthorized')
-  }
+  if (!req.headers.authorization) return next(new AuthorizationError('unauthorized'))
 
   const accessToken = req.headers.authorization.split(' ')[1]
 

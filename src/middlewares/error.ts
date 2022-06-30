@@ -1,3 +1,4 @@
+import { InvalidAuthRequestBodyError } from '@errors/auth'
 import { Request, Response, NextFunction } from 'express'
 
 import { TokenExpiredError } from 'jsonwebtoken'
@@ -20,6 +21,16 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
     return res.status(401).json({
       error: {
         message: err.message,
+        name: err.name
+      }
+    })
+  }
+
+  if (err && err.name === 'InvalidAuthRequestBodyError') {
+    return res.status(400).json({
+      error: {
+        message: err.message,
+        fields: (err as InvalidAuthRequestBodyError).fields,
         name: err.name
       }
     })

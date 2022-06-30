@@ -18,6 +18,9 @@
       "@src/*": [
         "src/*"
       ],
+      "@controllers/*": [
+        "src/controllers/*"
+      ],
       "@database/*": [
         "src/database/*"
       ],

@@ -4,17 +4,32 @@ import { userView } from '@views/users'
 
 import { createJwt, getJwtPayload } from '@utils/jwt'
 
-import { AuthorizationError, InvalidCredentialsError } from '@errors/auth'
+import { AuthorizationError, InvalidAuthRequestBodyError, InvalidCredentialsError } from '@errors/auth'
 import { UserNotFoundError } from '@errors/user'
-import { User } from '@src/models/user'
+import { User } from '@models/user'
 
 const auth = Router()
 
 type AuthRequestBody = { user: { email: string, password: string } }
 
 auth.post('/', async (req: Request<{}, {}, AuthRequestBody>, res: Response, next: NextFunction) => {
-  const email = req.body.user.email
-  const password = req.body.user.password
+  const reqUser = req.body.user
+
+  const invalidAuthRequest = new InvalidAuthRequestBodyError('invalid auth request body', [])
+
+  if (!reqUser) {
+    invalidAuthRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
+    return next(invalidAuthRequest)
+  }
+  const email = reqUser.email
+  const password = reqUser.password
+
+  if (!email || !password) {
+    if (!email) invalidAuthRequest.fields.push({ field: 'email', description: 'the user object should have an attribute \'email\'' })
+    if (!password) invalidAuthRequest.fields.push({ field: 'password', description: 'the user object should have an attribute \'password\'' })
+
+    return next(invalidAuthRequest)
+  }
 
   const user = await User.findOne({ where: { email } })
 
