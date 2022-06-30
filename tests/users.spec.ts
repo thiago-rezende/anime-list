@@ -93,4 +93,36 @@ describe('Users [v1]', () => {
     expect(res.statusCode).toBe(400)
     expect(res.body).toHaveProperty('error')
   })
+
+  test('[DELETE /v1/users/:id] existing user', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .delete(`/v1/users/${user.id}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(204)
+  })
+
+  test('[DELETE /v1/users/:id] non-existing user', async () => {
+    const user: User = users[1]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .delete('/v1/users/non-existing-id')
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(404)
+  })
 })

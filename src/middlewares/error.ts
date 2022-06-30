@@ -9,7 +9,7 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
 
   console.log('[anime-list] <error> ' + err)
 
-  if (err && err.name === 'JsonWebTokeError') {
+  if (err && err.name === 'JsonWebTokenError') {
     return res.status(401).json({
       error: {
         message: err.message,
