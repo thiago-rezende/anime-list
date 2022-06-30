@@ -24,6 +24,36 @@ describe('Authentication', () => {
     expect(res.body).toHaveProperty('access_token')
   })
 
+  test('[POST /auth] incorrect request body', async () => {
+    let res = await request(server)
+      .post('/auth')
+      .send({})
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/auth')
+      .send({ user: {} })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/auth')
+      .send({ user: { email: 'jhon.doe@domain.com' } })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+
+    res = await request(server)
+      .post('/auth')
+      .send({ user: { password: 'secret' } })
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error')
+  })
+
   test('[POST /auth] non-existent user', async () => {
     const res = await request(server)
       .post('/auth')

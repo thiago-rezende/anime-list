@@ -23,6 +23,7 @@ users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Respons
     invalidCreateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
     return next(invalidCreateUserRequest)
   }
+
   const email = reqUser.email
   const username = reqUser.username
   const password = reqUser.password
