@@ -3,10 +3,14 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
 import { InvalidCreateUserRequestBodyError, UserCreationError } from '@errors/user'
-import { createUser, deleteUser } from '@controllers/users'
+import { createUser, deleteUser, updateUser } from '@controllers/users'
 
 type CreateUserRequestBody = { user: UserDTO }
-type DeletUserRequestParams = { id: string }
+
+type DeleteUserRequestParams = { id: string }
+
+type UpdateUserRequestBody = { user: UserDTO }
+type UpdateUserRequestParams = { id: string }
 
 const users = Router()
 
@@ -44,12 +48,29 @@ users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Respons
   next(user as UserCreationError)
 })
 
-users.delete('/:id', async (req: Request<DeletUserRequestParams>, res: Response, next: NextFunction) => {
+users.delete('/:id', async (req: Request<DeleteUserRequestParams>, res: Response, next: NextFunction) => {
   const result = await deleteUser(req.params.id)
 
-  if (!result) { res.status(204).send() }
+  if (!result) { return res.status(204).send() }
 
-  next(result)
+  return next(result)
+})
+
+users.patch('/:id', async (req: Request<UpdateUserRequestParams, {}, UpdateUserRequestBody>, res: Response, next: NextFunction) => {
+  const reqUser = req.body.user
+
+  const invalidCreateUserRequest = new InvalidCreateUserRequestBodyError('invalid create user request body', [])
+
+  if (!reqUser) {
+    invalidCreateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
+    return next(invalidCreateUserRequest)
+  }
+
+  const user = await updateUser(req.params.id, reqUser)
+
+  if (user instanceof User) { return res.status(200).send({ user: userView(user) }) }
+
+  next(user)
 })
 
 export default users

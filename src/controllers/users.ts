@@ -30,3 +30,21 @@ export async function deleteUser(id: string): Promise<UserNotFoundError | void> 
 
   await user.destroy()
 }
+
+export async function updateUser(id: string, data: UserDTO): Promise<UserNotFoundError | User> {
+  const user = await User.findByPk(id)
+
+  if (!user) return new UserNotFoundError('user not found')
+
+  const email = data.email
+  const username = data.username
+  const password = data.password
+
+  if (email) user.email = email
+  if (username) user.username = username
+  if (password) user.password = password
+
+  await user.save()
+
+  return user
+}
