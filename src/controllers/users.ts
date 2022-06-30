@@ -1,5 +1,5 @@
 import { User, UserDTO } from '@models/user'
-import { UserCreationError } from '@errors/user'
+import { UserCreationError, UserNotFoundError } from '@errors/user'
 
 import { ValidationError } from 'sequelize/types'
 
@@ -21,4 +21,12 @@ export async function createUser(data: UserDTO): Promise<User | UserCreationErro
   }
 
   return user
+}
+
+export async function deleteUser(id: string): Promise<UserNotFoundError | void> {
+  const user = await User.findByPk(id)
+
+  if (!user) return new UserNotFoundError('user not found')
+
+  await user.destroy()
 }

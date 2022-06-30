@@ -3,9 +3,10 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
 import { InvalidCreateUserRequestBodyError, UserCreationError } from '@errors/user'
-import { createUser } from '@controllers/users'
+import { createUser, deleteUser } from '@controllers/users'
 
 type CreateUserRequestBody = { user: UserDTO }
+type DeletUserRequestParams = { id: string }
 
 const users = Router()
 
@@ -41,6 +42,14 @@ users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Respons
   if (user instanceof User) return res.status(201).json({ user: userView(user) })
 
   next(user as UserCreationError)
+})
+
+users.delete('/:id', async (req: Request<DeletUserRequestParams>, res: Response, next: NextFunction) => {
+  const result = await deleteUser(req.params.id)
+
+  if (!result) { res.status(204).send() }
+
+  next(result)
 })
 
 export default users
