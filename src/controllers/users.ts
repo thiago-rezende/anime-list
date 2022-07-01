@@ -1,7 +1,29 @@
 import { User, UserDTO } from '@models/user'
 import { UserCreationError, UserNotFoundError, UserUpdateError } from '@errors/user'
 
-import { ValidationError } from 'sequelize/types'
+import { FindOptions, ValidationError } from 'sequelize/types'
+
+export async function getUser(id: string): Promise<User | UserNotFoundError> {
+  const user = await User.findByPk(id)
+
+  if (!user) return new UserNotFoundError('user not found')
+
+  return user
+}
+
+export async function findUser(options: FindOptions): Promise<User | UserNotFoundError> {
+  const user = await User.findOne(options)
+
+  if (!user) return new UserNotFoundError('user not found')
+
+  return user
+}
+
+export async function listUsers(options?: FindOptions): Promise<{ rows: Array<User>, count: number }> {
+  const users = await User.findAndCountAll(options)
+
+  return users
+}
 
 export async function createUser(data: UserDTO): Promise<User | UserCreationError> {
   const user = User.build({ ...data })

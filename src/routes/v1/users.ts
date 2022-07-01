@@ -3,7 +3,9 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
 import { InvalidCreateUserRequestBodyError, UserCreationError } from '@errors/user'
-import { createUser, deleteUser, updateUser } from '@controllers/users'
+import { createUser, deleteUser, listUsers, updateUser } from '@controllers/users'
+import { FindOptions } from 'sequelize/types'
+import { getPaginationInfo } from '@utils/pagination'
 
 type CreateUserRequestBody = { user: UserDTO }
 
@@ -14,9 +16,18 @@ type UpdateUserRequestParams = { id: string }
 
 const users = Router()
 
-users.get('/', async (_req: Request, res: Response) => {
-  const users = await User.findAll()
-  res.status(200).json(usersView(users, 1, 1))
+type ListUsersRequestQuery = { page?: string, size?: string }
+
+users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Response) => {
+  const page = req.query.page
+  const size = req.query.size
+
+  const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
+  const options: FindOptions = { limit: paginationInfo.limit, offset: paginationInfo.offset }
+
+  const users = await listUsers(options)
+
+  res.status(200).json(usersView(users, paginationInfo))
 })
 
 users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {

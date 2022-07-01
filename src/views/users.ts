@@ -1,4 +1,6 @@
 import { User } from '@models/user'
+import { PaginationInfo } from '@utils/pagination'
+import { Model } from 'sequelize-typescript'
 
 export interface UserView {
   id: string,
@@ -10,17 +12,23 @@ export interface UserView {
 export interface UsersView {
   users: Array<UserView>,
   page: number,
-  pages: number
+  pageSize: number,
+  totalPages: number,
+  totalItems: number
 }
 
-export function usersView(users: Array<User>, page: number, pages: number): UsersView {
+type UsersViewData<M extends Model> = { rows: Array<M>, count: number }
+
+export function usersView(data: UsersViewData<User>, paginationInfo: PaginationInfo): UsersView {
   const view: UsersView = {
     users: [],
-    page,
-    pages
+    page: paginationInfo.page,
+    pageSize: paginationInfo.size,
+    totalPages: Math.ceil(data.count / paginationInfo.limit),
+    totalItems: data.count
   }
 
-  users.forEach(user => {
+  data.rows.forEach(user => {
     view.users.push(userView(user))
   })
 

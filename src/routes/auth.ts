@@ -6,7 +6,7 @@ import { createJwt, getJwtPayload } from '@utils/jwt'
 
 import { AuthorizationError, InvalidAuthRequestBodyError, InvalidCredentialsError } from '@errors/auth'
 import { UserNotFoundError } from '@errors/user'
-import { User } from '@models/user'
+import { findUser, getUser } from '@controllers/users'
 
 const auth = Router()
 
@@ -31,9 +31,9 @@ auth.post('/', async (req: Request<{}, {}, AuthRequestBody>, res: Response, next
     return next(invalidAuthRequest)
   }
 
-  const user = await User.findOne({ where: { email } })
+  const user = await findUser({ where: { email } })
 
-  if (!user) return next(new UserNotFoundError('user not found'))
+  if (user instanceof UserNotFoundError) return next(user)
 
   if (user.password !== password) return next(new InvalidCredentialsError('invalid credentials'))
 
@@ -50,9 +50,9 @@ auth.get('/me', async (req: Request, res: Response, next: NextFunction) => {
   if (accessToken) {
     const payload = getJwtPayload(accessToken)
 
-    const user = await User.findOne({ where: { id: payload.user.id } })
+    const user = await getUser(payload.user.id)
 
-    if (!user) return next(new UserNotFoundError('user not found'))
+    if (user instanceof UserNotFoundError) return next(user)
 
     return res.status(200).json({ user: userView(user) })
   }
