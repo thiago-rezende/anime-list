@@ -6,6 +6,7 @@ import database from '@database/index'
 import { users } from '@database/users'
 
 import { User } from '@models/user'
+import { UsersView } from '@views/users'
 
 describe('Users [v1]', () => {
   beforeAll(async () => {
@@ -31,10 +32,21 @@ describe('Users [v1]', () => {
 
     const res = await request(server)
       .get('/v1/users')
+      .query({ page: 1, size: 1 })
       .set('Authorization', 'Bearer ' + accessToken)
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toHaveProperty('users')
+    expect(res.body).toHaveProperty('page')
+    expect(res.body).toHaveProperty('pageSize')
+    expect(res.body).toHaveProperty('totalPages')
+    expect(res.body).toHaveProperty('totalItems')
+
+    expect((res.body as UsersView).users.length).toBe(1)
+    expect((res.body as UsersView).page).toBe(1)
+    expect((res.body as UsersView).pageSize).toBe(1)
+    expect((res.body as UsersView).totalPages).toBe(2)
+    expect((res.body as UsersView).totalItems).toBe(2)
   })
 
   test('[POST /v1/users] correct request body', async () => {
