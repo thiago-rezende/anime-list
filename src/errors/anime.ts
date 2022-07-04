@@ -1,6 +1,7 @@
-import { Field } from '@src/utils/fields'
+import { Field } from '@utils/fields'
+import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '@errors/common'
 
-export class AnimeNotFoundError extends Error {
+export class AnimeNotFoundError extends NotFoundError {
   constructor(message: string) {
     super(message)
 
@@ -8,46 +9,26 @@ export class AnimeNotFoundError extends Error {
   }
 }
 
-export class AnimeCreationError extends Error {
-  fields: Array<Field>
-
+export class AnimeCreationError extends CreationError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message, fields)
 
-    this.fields = fields
     this.name = 'AnimeCreationError'
   }
 }
 
-export class AnimeUpdateError extends Error {
-  fields: Array<Field>
-
+export class AnimeUpdateError extends UpdateError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message, fields)
 
-    this.fields = fields
     this.name = 'AnimeUpdateError'
   }
 }
 
-export class InvalidCreateAnimeRequestBodyError extends Error {
-  fields: Array<Field>
-
+export class InvalidAnimeRequestBodyError extends InvalidRequestBodyError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message, fields)
 
-    this.fields = fields
-    this.name = 'InvalidCreateAnimeRequestBodyError'
-  }
-}
-
-export class InvalidUpdateAnimeRequestBodyError extends Error {
-  fields: Array<Field>
-
-  constructor(message: string, fields: Array<Field>) {
-    super(message)
-
-    this.fields = fields
-    this.name = 'InvalidUpdateAnimeRequestBodyError'
+    this.name = 'InvalidAnimeRequestBodyError'
   }
 }

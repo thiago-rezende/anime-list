@@ -31,7 +31,7 @@ export async function createAnime(data: AnimeDTO): Promise<Anime | AnimeCreation
   try {
     await anime.save()
   } catch (err) {
-    const animeCreationError = new AnimeCreationError('failed on user creation', [])
+    const animeCreationError = new AnimeCreationError('failed on anime creation', [])
 
     const validationError = (err as ValidationError)
 

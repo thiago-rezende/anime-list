@@ -1,4 +1,5 @@
 import { Field } from '@utils/fields'
+import { InvalidRequestBodyError } from '@errors/common'
 
 export class AuthorizationError extends Error {
   constructor(message: string) {
@@ -8,7 +9,7 @@ export class AuthorizationError extends Error {
   }
 }
 
-export class InvalidCredentialsError extends Error {
+export class InvalidCredentialsError extends AuthorizationError {
   constructor(message: string) {
     super(message)
 
@@ -16,12 +17,9 @@ export class InvalidCredentialsError extends Error {
   }
 }
 
-export class InvalidAuthRequestBodyError extends Error {
-  fields: Array<Field>
-
+export class InvalidAuthRequestBodyError extends InvalidRequestBodyError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
-    this.fields = fields
+    super(message, fields)
     this.name = 'InvalidAuthRequestBodyError'
   }
 }

@@ -8,7 +8,7 @@ import { Anime, AnimeDTO } from '@models/anime'
 import { createAnime, listAnimes } from '@controllers/animes'
 import { animesView, animeView } from '@views/animes'
 
-import { AnimeCreationError, InvalidCreateAnimeRequestBodyError } from '@errors/anime'
+import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
 
 const animes = Router()
 
@@ -22,15 +22,15 @@ animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Re
   const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
   const options: FindOptions = { limit: paginationInfo.limit, offset: paginationInfo.offset }
 
-  const users = await listAnimes(options)
+  const animes = await listAnimes(options)
 
-  res.status(200).json(animesView(users, paginationInfo))
+  res.status(200).json(animesView(animes, paginationInfo))
 })
 
 animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Response, next: NextFunction) => {
   const reqAnime = req.body.anime
 
-  const invalidCreateAnimeRequest = new InvalidCreateAnimeRequestBodyError('invalid create Anime request body', [])
+  const invalidCreateAnimeRequest = new InvalidAnimeRequestBodyError('invalid create anime request body', [])
 
   if (!reqAnime) {
     invalidCreateAnimeRequest.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
@@ -42,9 +42,9 @@ animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Respo
   const releaseDate = reqAnime.releaseDate
 
   if (!name || !releaseDate || !synopsis) {
-    if (!name) invalidCreateAnimeRequest.fields.push({ field: 'name', description: 'the user object should have an attribute \'name\'' })
-    if (!synopsis) invalidCreateAnimeRequest.fields.push({ field: 'synopsis', description: 'the user object should have an attribute \'synopsis\'' })
-    if (!releaseDate) invalidCreateAnimeRequest.fields.push({ field: 'releaseDate', description: 'the user object should have an attribute \'releaseDate\'' })
+    if (!name) invalidCreateAnimeRequest.fields.push({ field: 'name', description: 'the anime object should have an attribute \'name\'' })
+    if (!synopsis) invalidCreateAnimeRequest.fields.push({ field: 'synopsis', description: 'the anime object should have an attribute \'synopsis\'' })
+    if (!releaseDate) invalidCreateAnimeRequest.fields.push({ field: 'releaseDate', description: 'the anime object should have an attribute \'releaseDate\'' })
 
     return next(invalidCreateAnimeRequest)
   }

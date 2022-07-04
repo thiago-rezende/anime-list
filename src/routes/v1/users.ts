@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express'
 
 import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
-import { InvalidCreateUserRequestBodyError, UserCreationError } from '@errors/user'
+import { InvalidUserRequestBodyError, UserCreationError } from '@errors/user'
 import { createUser, deleteUser, listUsers, updateUser } from '@controllers/users'
 import { FindOptions } from 'sequelize/types'
 import { getPaginationInfo } from '@utils/pagination'
@@ -33,7 +33,7 @@ users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Resp
 users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {
   const reqUser = req.body.user
 
-  const invalidCreateUserRequest = new InvalidCreateUserRequestBodyError('invalid create user request body', [])
+  const invalidCreateUserRequest = new InvalidUserRequestBodyError('invalid create user request body', [])
 
   if (!reqUser) {
     invalidCreateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
@@ -70,7 +70,7 @@ users.delete('/:id', async (req: Request<DeleteUserRequestParams>, res: Response
 users.patch('/:id', async (req: Request<UpdateUserRequestParams, {}, UpdateUserRequestBody>, res: Response, next: NextFunction) => {
   const reqUser = req.body.user
 
-  const invalidCreateUserRequest = new InvalidCreateUserRequestBodyError('invalid create user request body', [])
+  const invalidCreateUserRequest = new InvalidUserRequestBodyError('invalid create user request body', [])
 
   if (!reqUser) {
     invalidCreateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })

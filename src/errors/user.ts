@@ -1,6 +1,7 @@
-import { Field } from '@src/utils/fields'
+import { Field } from '@utils/fields'
+import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '@errors/common'
 
-export class UserNotFoundError extends Error {
+export class UserNotFoundError extends NotFoundError {
   constructor(message: string) {
     super(message)
 
@@ -8,46 +9,26 @@ export class UserNotFoundError extends Error {
   }
 }
 
-export class UserCreationError extends Error {
-  fields: Array<Field>
-
+export class UserCreationError extends CreationError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message, fields)
 
-    this.fields = fields
     this.name = 'UserCreationError'
   }
 }
 
-export class UserUpdateError extends Error {
-  fields: Array<Field>
-
+export class UserUpdateError extends UpdateError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message, fields)
 
-    this.fields = fields
     this.name = 'UserUpdateError'
   }
 }
 
-export class InvalidCreateUserRequestBodyError extends Error {
-  fields: Array<Field>
-
+export class InvalidUserRequestBodyError extends InvalidRequestBodyError {
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message, fields)
 
-    this.fields = fields
-    this.name = 'InvalidCreateUserRequestBodyError'
-  }
-}
-
-export class InvalidUpdateUserRequestBodyError extends Error {
-  fields: Array<Field>
-
-  constructor(message: string, fields: Array<Field>) {
-    super(message)
-
-    this.fields = fields
-    this.name = 'InvalidUpdateUserRequestBodyError'
+    this.name = 'InvalidUserRequestBodyError'
   }
 }
