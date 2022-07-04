@@ -1,16 +1,19 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 
 import { FindOptions } from 'sequelize/types'
 
 import { getPaginationInfo } from '@utils/pagination'
 
-import { Anime } from '@models/anime'
-import { listAnimes } from '@controllers/animes'
-import { animesView } from '@views/animes'
+import { Anime, AnimeDTO } from '@models/anime'
+import { createAnime, listAnimes } from '@controllers/animes'
+import { animesView, animeView } from '@views/animes'
+
+import { AnimeCreationError, InvalidCreateAnimeRequestBodyError } from '@errors/anime'
 
 const animes = Router()
 
 type ListAnimesRequestQuery = { page?: string, size?: string }
+type CreateAnimeRequestBody = { anime: AnimeDTO }
 
 animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Response) => {
   const page = req.query.page
@@ -22,6 +25,35 @@ animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Re
   const users = await listAnimes(options)
 
   res.status(200).json(animesView(users, paginationInfo))
+})
+
+animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Response, next: NextFunction) => {
+  const reqAnime = req.body.anime
+
+  const invalidCreateAnimeRequest = new InvalidCreateAnimeRequestBodyError('invalid create Anime request body', [])
+
+  if (!reqAnime) {
+    invalidCreateAnimeRequest.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
+    return next(invalidCreateAnimeRequest)
+  }
+
+  const name = reqAnime.name
+  const synopsis = reqAnime.synopsis
+  const releaseDate = reqAnime.releaseDate
+
+  if (!name || !releaseDate || !synopsis) {
+    if (!name) invalidCreateAnimeRequest.fields.push({ field: 'name', description: 'the user object should have an attribute \'name\'' })
+    if (!synopsis) invalidCreateAnimeRequest.fields.push({ field: 'synopsis', description: 'the user object should have an attribute \'synopsis\'' })
+    if (!releaseDate) invalidCreateAnimeRequest.fields.push({ field: 'releaseDate', description: 'the user object should have an attribute \'releaseDate\'' })
+
+    return next(invalidCreateAnimeRequest)
+  }
+
+  const anime = await createAnime(reqAnime)
+
+  if (anime instanceof Anime) return res.status(201).json({ anime: animeView(anime) })
+
+  next(anime as AnimeCreationError)
 })
 
 export default animes
