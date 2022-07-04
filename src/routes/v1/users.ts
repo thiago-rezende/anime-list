@@ -4,7 +4,7 @@ import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
 import { InvalidUserRequestBodyError, UserCreationError } from '@errors/user'
 import { createUser, deleteUser, listUsers, updateUser } from '@controllers/users'
-import { FindOptions } from 'sequelize/types'
+import { FindOptions, WhereOptions, Op } from 'sequelize'
 import { getPaginationInfo } from '@utils/pagination'
 
 const users = Router()
@@ -16,14 +16,21 @@ type DeleteUserRequestParams = { id: string }
 type UpdateUserRequestBody = { user: UserDTO }
 type UpdateUserRequestParams = { id: string }
 
-type ListUsersRequestQuery = { page?: string, size?: string }
+type ListUsersRequestQuery = { page?: string, size?: string, email?: string, username?: string }
 
 users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Response) => {
   const page = req.query.page
   const size = req.query.size
+  const email = req.query.email
+  const username = req.query.username
+
+  const where: WhereOptions = {}
+
+  if (email) where.email = { [Op.like]: '%' + email + '%' }
+  if (username) where.username = { [Op.like]: '%' + username + '%' }
 
   const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
-  const options: FindOptions = { limit: paginationInfo.limit, offset: paginationInfo.offset }
+  const options: FindOptions = { where, limit: paginationInfo.limit, offset: paginationInfo.offset }
 
   const users = await listUsers(options)
 
