@@ -5,6 +5,9 @@ import { Model } from 'sequelize-typescript'
 export interface AnimeView {
   id: string,
   name: string,
+  slug: string,
+  native: string,
+  romaji: string,
   synopsis: string,
   releaseDate: Date
 }
@@ -39,6 +42,9 @@ export function animeView(anime: Anime): AnimeView {
   return {
     id: anime.id,
     name: anime.name,
+    slug: anime.slug,
+    native: anime.native,
+    romaji: anime.romaji,
     synopsis: anime.synopsis,
     releaseDate: anime.releaseDate
   }

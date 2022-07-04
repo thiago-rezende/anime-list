@@ -38,11 +38,17 @@ animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Respo
   }
 
   const name = reqAnime.name
+  const slug = reqAnime.slug
+  const native = reqAnime.native
+  const romaji = reqAnime.romaji
   const synopsis = reqAnime.synopsis
   const releaseDate = reqAnime.releaseDate
 
-  if (!name || !releaseDate || !synopsis) {
+  if (!name || !slug || !native || !romaji || !synopsis || !releaseDate) {
     if (!name) invalidCreateAnimeRequest.fields.push({ field: 'name', description: 'the anime object should have an attribute \'name\'' })
+    if (!slug) invalidCreateAnimeRequest.fields.push({ field: 'slug', description: 'the anime object should have an attribute \'slug\'' })
+    if (!native) invalidCreateAnimeRequest.fields.push({ field: 'native', description: 'the anime object should have an attribute \'native\'' })
+    if (!romaji) invalidCreateAnimeRequest.fields.push({ field: 'romaji', description: 'the anime object should have an attribute \'romaji\'' })
     if (!synopsis) invalidCreateAnimeRequest.fields.push({ field: 'synopsis', description: 'the anime object should have an attribute \'synopsis\'' })
     if (!releaseDate) invalidCreateAnimeRequest.fields.push({ field: 'releaseDate', description: 'the anime object should have an attribute \'releaseDate\'' })
 

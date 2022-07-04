@@ -59,10 +59,16 @@ export async function updateAnime(id: string, data: AnimeDTO): Promise<AnimeNotF
   if (!anime) return new AnimeNotFoundError('anime not found')
 
   const name = data.name
+  const slug = data.slug
+  const native = data.native
+  const romaji = data.romaji
   const synopsis = data.synopsis
   const releaseDate = data.releaseDate
 
   if (name) anime.name = name
+  if (slug) anime.slug = slug
+  if (native) anime.native = native
+  if (romaji) anime.romaji = romaji
   if (synopsis) anime.synopsis = synopsis
   if (releaseDate) anime.releaseDate = releaseDate
 
