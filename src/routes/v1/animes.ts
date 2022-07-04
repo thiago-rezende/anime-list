@@ -5,7 +5,7 @@ import { FindOptions } from 'sequelize/types'
 import { getPaginationInfo } from '@utils/pagination'
 
 import { Anime, AnimeDTO } from '@models/anime'
-import { createAnime, deleteAnime, listAnimes } from '@controllers/animes'
+import { createAnime, deleteAnime, listAnimes, updateAnime } from '@controllers/animes'
 import { animesView, animeView } from '@views/animes'
 
 import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
@@ -16,6 +16,9 @@ type ListAnimesRequestQuery = { page?: string, size?: string }
 
 type CreateAnimeRequestBody = { anime: AnimeDTO }
 type DeleteAnimeRequestParams = { id: string }
+
+type UpdateAnimeRequestBody = { anime: AnimeDTO }
+type UpdateAnimeRequestParams = { id: string }
 
 animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Response) => {
   const page = req.query.page
@@ -70,6 +73,23 @@ animes.delete('/:id', async (req: Request<DeleteAnimeRequestParams>, res: Respon
   if (!result) { return res.status(204).send() }
 
   return next(result)
+})
+
+animes.patch('/:id', async (req: Request<UpdateAnimeRequestParams, {}, UpdateAnimeRequestBody>, res: Response, next: NextFunction) => {
+  const reqAnime = req.body.anime
+
+  const invalidUpdateAnimeRequestBody = new InvalidAnimeRequestBodyError('invalid update anime request body', [])
+
+  if (!reqAnime) {
+    invalidUpdateAnimeRequestBody.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
+    return next(invalidUpdateAnimeRequestBody)
+  }
+
+  const anime = await updateAnime(req.params.id, reqAnime)
+
+  if (anime instanceof Anime) { return res.status(200).send({ anime: animeView(anime) }) }
+
+  next(anime)
 })
 
 export default animes

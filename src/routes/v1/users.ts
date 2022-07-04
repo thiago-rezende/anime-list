@@ -70,11 +70,11 @@ users.delete('/:id', async (req: Request<DeleteUserRequestParams>, res: Response
 users.patch('/:id', async (req: Request<UpdateUserRequestParams, {}, UpdateUserRequestBody>, res: Response, next: NextFunction) => {
   const reqUser = req.body.user
 
-  const invalidCreateUserRequest = new InvalidUserRequestBodyError('invalid create user request body', [])
+  const invalidUpdateUserRequest = new InvalidUserRequestBodyError('invalid update user request body', [])
 
   if (!reqUser) {
-    invalidCreateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
-    return next(invalidCreateUserRequest)
+    invalidUpdateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
+    return next(invalidUpdateUserRequest)
   }
 
   const user = await updateUser(req.params.id, reqUser)
