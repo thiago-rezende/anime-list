@@ -61,9 +61,9 @@ users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Respons
 
   const user = await createUser(reqUser)
 
-  if (user instanceof User) return res.status(201).json({ user: userView(user) })
+  if (!(user instanceof User)) return next(user as UserCreationError)
 
-  next(user as UserCreationError)
+  res.status(201).json({ user: userView(user) })
 })
 
 users.delete('/:id', async (req: Request<DeleteUserRequestParams>, res: Response, next: NextFunction) => {
@@ -86,9 +86,9 @@ users.patch('/:id', async (req: Request<UpdateUserRequestParams, {}, UpdateUserR
 
   const user = await updateUser(req.params.id, reqUser)
 
-  if (user instanceof User) { return res.status(200).send({ user: userView(user) }) }
+  if (!(user instanceof User)) return next(user)
 
-  next(user)
+  res.status(200).send({ user: userView(user) })
 })
 
 export default users
