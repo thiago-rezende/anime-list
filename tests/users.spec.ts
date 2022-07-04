@@ -17,8 +17,8 @@ describe('Users [v1]', () => {
   test('[GET /v1/users] unauthenticated', async () => {
     const res = await request(server).get('/v1/users')
 
-    expect(res.statusCode).toBe(401)
-    expect(res.body).toHaveProperty('error')
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('users')
   })
 
   test('[GET /v1/users] authenticated', async () => {

@@ -19,8 +19,8 @@ describe('Animes [v1]', () => {
   test('[GET /v1/animes] unauthenticated', async () => {
     const res = await request(server).get('/v1/animes')
 
-    expect(res.statusCode).toBe(401)
-    expect(res.body).toHaveProperty('error')
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('animes')
   })
 
   test('[GET /v1/animes] authenticated', async () => {
