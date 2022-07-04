@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express'
 
-import { FindOptions } from 'sequelize/types'
+import { FindOptions, Op, WhereOptions } from 'sequelize'
 
 import { getPaginationInfo } from '@utils/pagination'
 
@@ -12,7 +12,7 @@ import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
 
 const animes = Router()
 
-type ListAnimesRequestQuery = { page?: string, size?: string }
+type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, native?: string, romaji?: string }
 
 type CreateAnimeRequestBody = { anime: AnimeDTO }
 type DeleteAnimeRequestParams = { id: string }
@@ -23,9 +23,18 @@ type UpdateAnimeRequestParams = { id: string }
 animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Response) => {
   const page = req.query.page
   const size = req.query.size
+  const name = req.query.name
+  const native = req.query.native
+  const romaji = req.query.romaji
+
+  const where: WhereOptions = {}
+
+  if (name) where.name = { [Op.like]: '%' + name + '%' }
+  if (native) where.native = { [Op.like]: '%' + native + '%' }
+  if (romaji) where.romaji = { [Op.like]: '%' + romaji + '%' }
 
   const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
-  const options: FindOptions = { limit: paginationInfo.limit, offset: paginationInfo.offset }
+  const options: FindOptions = { where, limit: paginationInfo.limit, offset: paginationInfo.offset }
 
   const animes = await listAnimes(options)
 
