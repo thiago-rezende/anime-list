@@ -7,14 +7,14 @@ import { createUser, deleteUser, listUsers, updateUser } from '@controllers/user
 import { FindOptions } from 'sequelize/types'
 import { getPaginationInfo } from '@utils/pagination'
 
+const users = Router()
+
 type CreateUserRequestBody = { user: UserDTO }
 
 type DeleteUserRequestParams = { id: string }
 
 type UpdateUserRequestBody = { user: UserDTO }
 type UpdateUserRequestParams = { id: string }
-
-const users = Router()
 
 type ListUsersRequestQuery = { page?: string, size?: string }
 
