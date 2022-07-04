@@ -197,4 +197,37 @@ describe('Animes [v1]', () => {
     expect(res.statusCode).toBe(409)
     expect(res.body).toHaveProperty('error')
   })
+
+  test('[DELETE /v1/animes/:id] existing anime', async () => {
+    const user: User = users[0]
+    const anime: Anime = animes[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .delete(`/v1/animes/${anime.id}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(204)
+  })
+
+  test('[DELETE /v1/anime/:id] non-existing anime', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .delete('/v1/animes/non-existing-id')
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(404)
+  })
 })
