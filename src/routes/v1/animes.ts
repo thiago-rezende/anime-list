@@ -12,7 +12,7 @@ import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
 
 const animes = Router()
 
-type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, native?: string, romaji?: string }
+type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, slug?: string, native?: string, romaji?: string }
 
 type CreateAnimeRequestBody = { anime: AnimeDTO }
 type DeleteAnimeRequestParams = { id: string }
@@ -26,12 +26,14 @@ animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Re
   const page = req.query.page
   const size = req.query.size
   const name = req.query.name
+  const slug = req.query.slug
   const native = req.query.native
   const romaji = req.query.romaji
 
   const where: WhereOptions = {}
 
   if (name) where.name = { [Op.like]: '%' + name + '%' }
+  if (slug) where.slug = { [Op.like]: '%' + slug + '%' }
   if (native) where.native = { [Op.like]: '%' + native + '%' }
   if (romaji) where.romaji = { [Op.like]: '%' + romaji + '%' }
 

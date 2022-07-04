@@ -115,7 +115,7 @@ describe('Animes [v1]', () => {
           slug: 'violet-evergarden',
           native: 'ヴァイオレット・エヴァーガーデン',
           romaji: 'Vaioretto Evāgāden',
-          synopsis: "Violet Evergarden (ヴァイオレット・エヴァーガーデン, Vaioretto Evāgāden) is the protagonist of the Violet Evergarden series. Violet is a former soldier who was enlisted in the Leidenschaftlich army and fought in the war, where she was treated as nothing more than a weapon. Violet became an Auto Memories Doll at the CH Postal Company after the war, seeking to understand the meaning of the words \"I love you\", which was said to her by her major Gilbert Bougainvillea, during the War's final battle.",
+          synopsis: "A certain point in time, in the continent of Telesis. The great war which divided the continent into North and South has ended after four years, and the people are welcoming a new generation. Violet Evergarden, a young girl formerly known as “the weapon”, has left the battlefield to start a new life at CH Postal Service. There, she is deeply moved by the work of “Auto Memories Dolls”, who carry people's thoughts and convert them into words. Violet begins her journey as an Auto Memories Doll, and comes face to face with various people's emotions and differing shapes of love. There are words Violet heard on the battlefield, which she cannot forget. These words were given to her by someone she holds dear, more than anyone else. She does not yet know their meaning but she searches to find it.",
           releaseDate: '2018-01-11T00:00:00.000Z'
         }
       })
@@ -178,7 +178,7 @@ describe('Animes [v1]', () => {
           slug: 'violet-evergarden-gaiden',
           native: 'ヴァイオレット・エヴァーガーデン 外伝',
           romaji: 'Vaioretto Evāgāden Gaiden',
-          synopsis: 'Gaiden consists of six stories in total: the first one revolves around Charlotte\'s story. Another story will be centered on Benedict who visits a certain town with Violet due to work and they lose track of one another. Another will feature Cattleya, who gets proposed to by one of her clients, and while his personality has nothing to be criticized as a marriage partner, a “certain person” keeps surfacing in Cattleya’s mind. Another one will be about Gilbert and Hodgins, who met for the first time in the military academy that they attended. Hodgins reminisces about how he and Gilbert became friends and the things they had done. The last story features all the CH Postal Company characters. The company shows a rapid growth due to being supported by the public as they are even able to deliver letters to and from the battlefields.',
+          synopsis: 'Violet Evergarden comes to a private women\'s academy to tutor Isabella in the ways of being a lady. Heir to the York family, Isabella feels trapped in this new and uncomfortable world. She still grieves for the only person to ever bring her happiness – now lost to her. Violet\'s lessons do give her a brief respite from the melancholy but with the absence of joy, how long does it take to truly heal?',
           releaseDate: '2019-03-18T00:00:00.000Z'
         }
       })
