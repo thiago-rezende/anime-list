@@ -5,7 +5,7 @@ import { FindOptions } from 'sequelize/types'
 import { getPaginationInfo } from '@utils/pagination'
 
 import { Anime, AnimeDTO } from '@models/anime'
-import { createAnime, listAnimes } from '@controllers/animes'
+import { createAnime, deleteAnime, listAnimes } from '@controllers/animes'
 import { animesView, animeView } from '@views/animes'
 
 import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
@@ -13,7 +13,9 @@ import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
 const animes = Router()
 
 type ListAnimesRequestQuery = { page?: string, size?: string }
+
 type CreateAnimeRequestBody = { anime: AnimeDTO }
+type DeleteAnimeRequestParams = { id: string }
 
 animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Response) => {
   const page = req.query.page
@@ -60,6 +62,14 @@ animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Respo
   if (anime instanceof Anime) return res.status(201).json({ anime: animeView(anime) })
 
   next(anime as AnimeCreationError)
+})
+
+animes.delete('/:id', async (req: Request<DeleteAnimeRequestParams>, res: Response, next: NextFunction) => {
+  const result = await deleteAnime(req.params.id)
+
+  if (!result) { return res.status(204).send() }
+
+  return next(result)
 })
 
 export default animes
