@@ -5,7 +5,7 @@ import { FindOptions, Op, WhereOptions } from 'sequelize'
 import { getPaginationInfo } from '@utils/pagination'
 
 import { Anime, AnimeDTO } from '@models/anime'
-import { createAnime, deleteAnime, listAnimes, updateAnime } from '@controllers/animes'
+import { createAnime, deleteAnime, getAnimeBySlug, listAnimes, updateAnime } from '@controllers/animes'
 import { animesView, animeView } from '@views/animes'
 
 import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
@@ -16,6 +16,8 @@ type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, nat
 
 type CreateAnimeRequestBody = { anime: AnimeDTO }
 type DeleteAnimeRequestParams = { id: string }
+
+type GetAnimeRequestParms = { slug: string }
 
 type UpdateAnimeRequestBody = { anime: AnimeDTO }
 type UpdateAnimeRequestParams = { id: string }
@@ -39,6 +41,16 @@ animes.get('/', async (req: Request<{}, {}, {}, ListAnimesRequestQuery>, res: Re
   const animes = await listAnimes(options)
 
   res.status(200).json(animesView(animes, paginationInfo))
+})
+
+animes.get('/:slug', async (req: Request<GetAnimeRequestParms>, res: Response, next: NextFunction) => {
+  const slug = req.params.slug
+
+  const anime = await getAnimeBySlug(slug)
+
+  if (!(anime instanceof Anime)) return next(anime)
+
+  res.status(200).json({ anime: animeView(anime) })
 })
 
 animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Response, next: NextFunction) => {
@@ -71,9 +83,9 @@ animes.post('/', async (req: Request<{}, {}, CreateAnimeRequestBody>, res: Respo
 
   const anime = await createAnime(reqAnime)
 
-  if (anime instanceof Anime) return res.status(201).json({ anime: animeView(anime) })
+  if (!(anime instanceof Anime)) return next(anime as AnimeCreationError)
 
-  next(anime as AnimeCreationError)
+  res.status(201).json({ anime: animeView(anime) })
 })
 
 animes.delete('/:id', async (req: Request<DeleteAnimeRequestParams>, res: Response, next: NextFunction) => {
@@ -96,9 +108,9 @@ animes.patch('/:id', async (req: Request<UpdateAnimeRequestParams, {}, UpdateAni
 
   const anime = await updateAnime(req.params.id, reqAnime)
 
-  if (anime instanceof Anime) { return res.status(200).send({ anime: animeView(anime) }) }
+  if (!(anime instanceof Anime)) return next(anime)
 
-  next(anime)
+  res.status(200).send({ anime: animeView(anime) })
 })
 
 export default animes

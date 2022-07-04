@@ -11,6 +11,14 @@ export async function getAnime(id: string): Promise<Anime | AnimeNotFoundError> 
   return anime
 }
 
+export async function getAnimeBySlug(slug: string): Promise<Anime | AnimeNotFoundError> {
+  const anime = await Anime.findOne({ where: { slug } })
+
+  if (!anime) return new AnimeNotFoundError('anime not found')
+
+  return anime
+}
+
 export async function findAnime(options: FindOptions): Promise<Anime | AnimeNotFoundError> {
   const anime = await Anime.findOne(options)
 
