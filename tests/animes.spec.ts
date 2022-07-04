@@ -51,6 +51,41 @@ describe('Animes [v1]', () => {
     expect((res.body as AnimesView).totalItems).toBe(2)
   })
 
+  test('[GET /v1/animes/:slug] non-existing anime', async () => {
+    const user: User = users[0]
+    const anime = { slug: 'violet-evergarden' }
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .get(`/v1/animes/${anime.slug}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(404)
+  })
+
+  test('[GET /v1/animes/:slug] existing anime', async () => {
+    const user: User = users[0]
+    const anime: Anime = animes[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .get(`/v1/animes/${anime.slug}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('anime')
+  })
+
   test('[POST /v1/animes] correct request body', async () => {
     const anime: Anime = animes[0]
 
