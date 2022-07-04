@@ -60,7 +60,7 @@ describe('Users [v1]', () => {
     expect(res.body).toHaveProperty('error')
   })
 
-  test('[POST /v1/users] already existing user', async () => {
+  test('[POST /v1/users] non-existing user', async () => {
     const res = await request(server)
       .post('/v1/users')
       .send({ user: { email: 'jhon.doe@domain.com', username: 'jhon.doe', password: 'secret' } })
@@ -80,27 +80,6 @@ describe('Users [v1]', () => {
     res = await request(server)
       .post('/v1/users')
       .send({ user: {} })
-
-    expect(res.statusCode).toBe(400)
-    expect(res.body).toHaveProperty('error')
-
-    res = await request(server)
-      .post('/v1/users')
-      .send({ user: { email: 'jhon.doe@domain.com' } })
-
-    expect(res.statusCode).toBe(400)
-    expect(res.body).toHaveProperty('error')
-
-    res = await request(server)
-      .post('/v1/users')
-      .send({ user: { username: 'jhon.doe' } })
-
-    expect(res.statusCode).toBe(400)
-    expect(res.body).toHaveProperty('error')
-
-    res = await request(server)
-      .post('/v1/users')
-      .send({ user: { password: 'secret' } })
 
     expect(res.statusCode).toBe(400)
     expect(res.body).toHaveProperty('error')
