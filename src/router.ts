@@ -11,7 +11,7 @@ router.use('/auth', auth)
 router.get('/', (_req: Request, res: Response) => {
   res.status(200).json({
     message: 'Anime List',
-    version: '0.3.0',
+    version: process.env.npm_package_version,
     resources: [
       '/auth',
       '/v1'
