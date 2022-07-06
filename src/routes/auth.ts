@@ -2,11 +2,15 @@ import { Router, Request, Response, NextFunction } from 'express'
 
 import { userView } from '@views/users'
 
-import { createJwt, getJwtPayload } from '@utils/jwt'
+import { createJwt } from '@utils/jwt'
 
-import { AuthorizationError, InvalidAuthRequestBodyError, InvalidCredentialsError } from '@errors/auth'
+import { InvalidAuthRequestBodyError, InvalidCredentialsError } from '@errors/auth'
+
+import { User } from '@models/user'
+
 import { UserNotFoundError } from '@errors/user'
-import { findUser, getUser } from '@controllers/users'
+
+import { findUser } from '@controllers/users'
 
 const auth = Router()
 
@@ -44,20 +48,8 @@ auth.post('/', async (req: Request<{}, {}, AuthRequestBody>, res: Response, next
   return res.status(200).json({ access_token: accessToken })
 })
 
-auth.get('/me', async (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.headers.authorization?.split(' ')[1]
-
-  if (accessToken) {
-    const payload = getJwtPayload(accessToken)
-
-    const user = await getUser(payload.user.id)
-
-    if (user instanceof UserNotFoundError) return next(user)
-
-    return res.status(200).json({ user: userView(user) })
-  }
-
-  next(new AuthorizationError('unauthorized'))
+auth.get('/me', async (req: Request, res: Response) => {
+  return res.status(200).json({ user: userView(req.user as User) })
 })
 
 export default auth

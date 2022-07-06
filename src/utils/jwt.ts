@@ -3,7 +3,7 @@ import config from '@config/index'
 import { User } from '@models/user'
 import { userView } from '@views/users'
 
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken'
 
 export function createJwt(user: User): string {
   const payload: JwtPayload = {
@@ -18,8 +18,12 @@ export function createJwt(user: User): string {
   return accessToken
 }
 
-export function validateJwt(accessToken: string): JwtPayload {
-  return (jwt.verify(accessToken, config.jwt.publicKey) as JwtPayload)
+export function validateJwt(accessToken: string): JwtPayload | JsonWebTokenError {
+  try {
+    return (jwt.verify(accessToken, config.jwt.publicKey) as JwtPayload)
+  } catch (error) {
+    return error as JsonWebTokenError
+  }
 }
 
 export function getJwtPayload(accessToken: string): JwtPayload {
