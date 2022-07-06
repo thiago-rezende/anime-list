@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+ - [208b354] feat: add username route to users resource (Thiago Rezende)
+ - [8ffd03d] feat: move all authentication and user info gathering to auth middleware (Thiago Rezende)
+ - [bd42d33] docs: add changelog generator script (Thiago Rezende)
 
 ## [v0.4.1]
  - [c9799e5] docs: update version number (Thiago Rezende)

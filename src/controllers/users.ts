@@ -3,6 +3,8 @@ import { UserCreationError, UserNotFoundError, UserUpdateError } from '@errors/u
 
 import { FindOptions, ValidationError } from 'sequelize/types'
 
+import { Anime } from '@models/anime'
+
 export async function getUser(id: string): Promise<User | UserNotFoundError> {
   const user = await User.findByPk(id)
 
@@ -12,7 +14,7 @@ export async function getUser(id: string): Promise<User | UserNotFoundError> {
 }
 
 export async function getUserByUsername(username: string): Promise<User | UserNotFoundError> {
-  const user = await User.findOne({ where: { username } })
+  const user = await User.findOne({ where: { username }, include: [Anime] })
 
   if (!user) return new UserNotFoundError('user not found')
 

@@ -2,30 +2,33 @@ import config from '@config/database'
 
 import { seed as seedUsers } from '@database/users'
 import { seed as seedAnimes } from '@database/animes'
+import { seed as seedAnimeList } from '@database/anime_list'
 
 import { Sequelize } from 'sequelize-typescript'
 
 import { User } from '@models/user'
 import { Anime } from '@models/anime'
+import { AnimeList } from '@models/anime_list'
 
 const sequelize = new Sequelize({
   ...config,
-  models: [User, Anime]
+  models: [User, Anime, AnimeList]
 })
 
 interface Database {
-  seed: () => void
-  sync: (foce: boolean) => void
+  seed: () => Promise<void>
+  sync: (foce: boolean) => Promise<void>
 }
 
 const database: Database = {
-  seed: () => {
-    seedUsers()
-    seedAnimes()
+  seed: async () => {
+    await seedUsers()
+    await seedAnimes()
+    await seedAnimeList()
   },
   sync: async (force: boolean) => {
     await sequelize.sync({ force })
-    sequelize.addModels([User, Anime])
+    sequelize.addModels([User, Anime, AnimeList])
   }
 }
 

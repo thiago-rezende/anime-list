@@ -2,13 +2,12 @@ import { User } from '@models/user'
 
 const users: Array<User> = []
 
-function seed() {
+async function seed() {
   users.push(User.build({ email: 'thiago.manoel.rezende@gmail.com', username: 'thiago-rezende', password: 'secret' }))
   users.push(User.build({ email: 'horus.he4rt@gmail.com', username: 'horus-he4rt', password: 'super_secret' }))
 
-  users.forEach(user => {
-    user.save()
-  })
+  await users[0].save()
+  await users[1].save()
 }
 
 export { seed, users }

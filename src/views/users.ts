@@ -1,4 +1,5 @@
 import { User } from '@models/user'
+import { Anime } from '@models/anime'
 import { PaginationInfo } from '@utils/pagination'
 import { Model } from 'sequelize-typescript'
 
@@ -6,7 +7,8 @@ export interface UserView {
   id: string,
   username: string,
   email: string,
-  password?: string
+  password?: string,
+  animes?: Array<Anime>
 }
 
 export interface UsersView {
@@ -39,6 +41,7 @@ export function userView(user: User): UserView {
   return {
     id: user.id,
     username: user.username,
-    email: user.email
+    email: user.email,
+    animes: user.animes
   }
 }
