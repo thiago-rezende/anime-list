@@ -3,20 +3,22 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
 import { InvalidUserRequestBodyError, UserCreationError } from '@errors/user'
-import { createUser, deleteUser, listUsers, updateUser } from '@controllers/users'
+import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from '@controllers/users'
 import { FindOptions, WhereOptions, Op } from 'sequelize'
 import { getPaginationInfo } from '@utils/pagination'
 
 const users = Router()
 
-type CreateUserRequestBody = { user: UserDTO }
+type ListUsersRequestQuery = { page?: string, size?: string, email?: string, username?: string }
 
-type DeleteUserRequestParams = { id: string }
+type GetUserRequestParams = { username: string }
+
+type CreateUserRequestBody = { user: UserDTO }
 
 type UpdateUserRequestBody = { user: UserDTO }
 type UpdateUserRequestParams = { id: string }
 
-type ListUsersRequestQuery = { page?: string, size?: string, email?: string, username?: string }
+type DeleteUserRequestParams = { id: string }
 
 users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Response) => {
   const page = req.query.page
@@ -35,6 +37,16 @@ users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Resp
   const users = await listUsers(options)
 
   res.status(200).json(usersView(users, paginationInfo))
+})
+
+users.get('/:username', async (req: Request<GetUserRequestParams>, res: Response, next: NextFunction) => {
+  const username = req.params.username
+
+  const user = await getUserByUsername(username)
+
+  if (!(user instanceof User)) return next(user)
+
+  res.status(200).json({ user: userView(user) })
 })
 
 users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {

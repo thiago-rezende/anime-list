@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtoken'
 
-import { AuthorizationError } from '@errors/auth'
+import { AuthenticationError, AuthorizationError } from '@errors/auth'
 
 import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '@errors/common'
 
@@ -22,8 +22,17 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
     })
   }
 
-  if (err && err instanceof AuthorizationError) {
+  if (err && err instanceof AuthenticationError) {
     return res.status(401).json({
+      error: {
+        message: err.message,
+        name: err.name
+      }
+    })
+  }
+
+  if (err && err instanceof AuthorizationError) {
+    return res.status(403).json({
       error: {
         message: err.message,
         name: err.name

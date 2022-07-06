@@ -11,6 +11,14 @@ export async function getUser(id: string): Promise<User | UserNotFoundError> {
   return user
 }
 
+export async function getUserByUsername(username: string): Promise<User | UserNotFoundError> {
+  const user = await User.findOne({ where: { username } })
+
+  if (!user) return new UserNotFoundError('user not found')
+
+  return user
+}
+
 export async function findUser(options: FindOptions): Promise<User | UserNotFoundError> {
   const user = await User.findOne(options)
 
