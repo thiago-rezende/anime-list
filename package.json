@@ -10,8 +10,13 @@
   "scripts": {
     "watch": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --quiet --transpile-only src/index.ts",
     "start": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
+    "db:create": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/create.ts",
+    "db:drop": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/drop.ts",
+    "db:sync": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/sync.ts",
+    "db:seed": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/seed.ts",
+    "db:setup": "yarn db:drop && yarn db:create && yarn db:sync && yarn db:seed",
     "lint": "eslint src/**/*.ts",
-    "test": "jest --setupFiles dotenv/config"
+    "test": "jest --setupFiles dotenv/config --verbose --silent --runInBand"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

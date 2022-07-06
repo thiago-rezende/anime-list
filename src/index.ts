@@ -4,8 +4,7 @@ import config from '@config/index'
 import database from '@database/index'
 
 (async () => {
-  await database.sync(true)
-  await database.seed()
+  await database.sync(false)
 })()
 
 start(config.env.port, () => console.log(`[anime-list]: listening on port ${config.env.port}`))

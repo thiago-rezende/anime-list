@@ -10,7 +10,11 @@ import { User } from '@models/user'
 describe('Authentication', () => {
   beforeAll(async () => {
     await database.sync(true)
-    database.seed()
+    await database.seed()
+  })
+
+  afterAll(async () => {
+    await database.close()
   })
 
   test('[POST /auth] correct credentials', async () => {

@@ -17,7 +17,8 @@ const sequelize = new Sequelize({
 
 interface Database {
   seed: () => Promise<void>
-  sync: (foce: boolean) => Promise<void>
+  sync: (foce: boolean) => Promise<void>,
+  close: () => Promise<void>
 }
 
 const database: Database = {
@@ -29,6 +30,9 @@ const database: Database = {
   sync: async (force: boolean) => {
     await sequelize.sync({ force })
     sequelize.addModels([User, Anime, AnimeList])
+  },
+  close: async () => {
+    await sequelize.close()
   }
 }
 

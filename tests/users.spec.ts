@@ -11,7 +11,11 @@ import { UsersView } from '@views/users'
 describe('Users [v1]', () => {
   beforeAll(async () => {
     await database.sync(true)
-    database.seed()
+    await database.seed()
+  })
+
+  afterAll(async () => {
+    await database.close()
   })
 
   test('[GET /v1/users] unauthenticated', async () => {
