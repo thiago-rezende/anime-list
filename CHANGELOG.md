@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+ - [914478b] docs: add postman collection (Thiago Rezende)
+
+## [v1.0.0]
+ - [72d1797] docs: update version number (Thiago Rezende)
+ - [da4195f] test: add test coverage to anime removal from user list (Thiago Rezende)
+ - [d30c135] test: add test coverage to anime addition to user list (Thiago Rezende)
+ - [03f6cbe] feat: add nested route to username for anime removal (Thiago Rezende)
+ - [fe3f561] feat: add nested route to username for anime additions (Thiago Rezende)
+ - [11bb638] docs: generate new changelog (Thiago Rezende)
 
 ## [v0.5.0]
  - [347cc32] docs: update version number (Thiago Rezende)
