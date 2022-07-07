@@ -1,0 +1,767 @@
+{
+  "info": {
+    "_postman_id": "15b1a4d7-e389-45c0-9f0e-46bc0bb8a17d",
+    "name": "Anime List",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21391884"
+  },
+  "item": [
+    {
+      "name": "Common",
+      "item": [
+        {
+          "name": "index",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{anime-list-url}}/",
+              "host": [
+                "{{anime-list-url}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "v1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{anime-list-url}}/v1",
+              "host": [
+                "{{anime-list-url}}"
+              ],
+              "path": [
+                "v1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Authenticate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code == 200) {\r",
+                  "    const access_token = pm.response.json().access_token\r",
+                  "\r",
+                  "    pm.collectionVariables.set('bearer-token', access_token)\r",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user\": {\r\n        \"email\": \"{{email}}\",\r\n        \"password\": \"{{password}}\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{anime-list-url}}/auth",
+              "host": [
+                "{{anime-list-url}}"
+              ],
+              "path": [
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code == 200) {\r",
+                  "    const id = pm.response.json().user.id\r",
+                  "    const email = pm.response.json().user.email\r",
+                  "    const username = pm.response.json().user.username\r",
+                  "\r",
+                  "    pm.collectionVariables.set('id', id)\r",
+                  "    pm.collectionVariables.set('email', email)\r",
+                  "    pm.collectionVariables.set('username', username)\r",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{anime-list-url}}/auth/me",
+              "host": [
+                "{{anime-list-url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "Index",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users?page=1&size=1",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "1"
+                    },
+                    {
+                      "key": "email",
+                      "value": "horus",
+                      "disabled": true
+                    },
+                    {
+                      "key": "username",
+                      "value": "he4rt",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "username",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users/:username",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    ":username"
+                  ],
+                  "variable": [
+                    {
+                      "key": "username",
+                      "value": "thiago-rezende"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addAnime",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"anime\": {\r\n        \"animeId\": \"{{anime-id}}\",\r\n        \"startedAt\": \"2022-07-07T17:33:01.498Z\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users/:username/list",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    ":username",
+                    "list"
+                  ],
+                  "variable": [
+                    {
+                      "key": "username",
+                      "value": "thiago-rezende"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "removeAnime",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"anime\": {\r\n        \"animeId\": \"{{anime-id}}\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users/:username/list",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    ":username",
+                    "list"
+                  ],
+                  "variable": [
+                    {
+                      "key": "username",
+                      "value": "thiago-rezende"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "list",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users/:username/list?page=1&size=1",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    ":username",
+                    "list"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "1"
+                    },
+                    {
+                      "key": "slug",
+                      "value": "full",
+                      "disabled": true
+                    },
+                    {
+                      "key": "name",
+                      "value": "Neon",
+                      "disabled": true
+                    },
+                    {
+                      "key": "native",
+                      "value": "鋼",
+                      "disabled": true
+                    },
+                    {
+                      "key": "romaji",
+                      "value": "Vaioretto Evāgāden",
+                      "disabled": true
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "username",
+                      "value": "{{username}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if(pm.response.code == 201) {\r",
+                      "    const id = pm.response.json().user.id\r",
+                      "    const email = pm.response.json().user.email\r",
+                      "    const username = pm.response.json().user.username\r",
+                      "    const password = JSON.parse(pm.request.body.raw).user.password\r",
+                      "\r",
+                      "    pm.collectionVariables.set('id', id)\r",
+                      "    pm.collectionVariables.set('email', email)\r",
+                      "    pm.collectionVariables.set('username', username)\r",
+                      "    pm.collectionVariables.set('password', password)\r",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"user\": {\r\n        \"email\": \"tihago.rezende@hotmail.com.br\",\r\n        \"username\": \"thiago.rezende\",\r\n        \"password\": \"secret\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if(pm.response.code == 200) {\r",
+                      "    const id = pm.response.json().user.id\r",
+                      "    const email = pm.response.json().user.email\r",
+                      "    const username = pm.response.json().user.username\r",
+                      "    const password = JSON.parse(pm.request.body.raw).user.password\r",
+                      "\r",
+                      "    pm.collectionVariables.set('id', id)\r",
+                      "    pm.collectionVariables.set('email', email)\r",
+                      "    pm.collectionVariables.set('username', username)\r",
+                      "    pm.collectionVariables.set('password', password)\r",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"user\": {\r\n        \"email\": \"tihago.rezende@outlook.com.br\",\r\n        \"username\": \"thiago.rezende\",\r\n        \"password\": \"secret\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users/:id",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/users/:id",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Animes",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "Index",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/animes?page=1&size=1",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "animes"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "size",
+                      "value": "1"
+                    },
+                    {
+                      "key": "slug",
+                      "value": "full",
+                      "disabled": true
+                    },
+                    {
+                      "key": "name",
+                      "value": "Neon",
+                      "disabled": true
+                    },
+                    {
+                      "key": "native",
+                      "value": "鋼",
+                      "disabled": true
+                    },
+                    {
+                      "key": "romaji",
+                      "value": "Vaioretto Evāgāden",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "slug",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/animes/:slug",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "animes",
+                    ":slug"
+                  ],
+                  "variable": [
+                    {
+                      "key": "slug",
+                      "value": "neon-genesis-evangelion"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if(pm.response.code == 201) {\r",
+                      "    const id = pm.response.json().anime.id\r",
+                      "\r",
+                      "    pm.collectionVariables.set('anime-id', id)\r",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"anime\": {\r\n        \"name\": \"Violet Evergarden\",\r\n        \"slug\": \"violet-evergarden\",\r\n        \"native\": \"ヴァイオレット・エヴァーガーデン\",\r\n        \"romaji\": \"Vaioretto Evāgāden\",\r\n        \"synopsis\": \"Violet Evergarden (ヴァイオレット・エヴァーガーデン, Vaioretto Evāgāden) is the protagonist of the Violet Evergarden series. Violet is a former soldier who was enlisted in the Leidenschaftlich army and fought in the war, where she was treated as nothing more than a weapon. Violet became an Auto Memories Doll at the CH Postal Company after the war, seeking to understand the meaning of the words \\\"I love you\\\", which was said to her by her major Gilbert Bougainvillea, during the War's final battle.\",\r\n        \"releaseDate\": \"2018-01-11T00:00:00.000Z\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/animes",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "animes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if(pm.response.code == 200) {\r",
+                      "    const id = pm.response.json().anime.id\r",
+                      "\r",
+                      "    pm.collectionVariables.set('anime-id', id)\r",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"anime\": {\r\n        \"name\": \"Violet Evergarden: The Movie\",\r\n        \"slug\": \"violet-evergarden-the-movie\",\r\n        \"native\": \"劇場版ヴァイオレットエヴァーガーデン\",\r\n        \"romaji\": \"Gekijouban Vaioretto Evāgāden\",\r\n        \"synopsis\": \"The name of the girl who writes on behalf of others is \\\"Violet Evergarden\\\". Four years have passed since the end of the war that had deeply injured people. The world is gradually regaining its peace, life changes with the development of new technologies, and people advancing forward. While holding her feelings for her important person, Violet Evergarden tries to live in this world without that person. One day, a letter is found...\",\r\n        \"releaseDate\": \"2020-09-18T00:00:00.000Z\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/animes/:id",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "animes",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{anime-id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{anime-list-url}}/v1/animes/:id",
+                  "host": [
+                    "{{anime-list-url}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "animes",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{anime-id}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearer-token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "anime-list-url",
+      "value": "https://anime-list.m13920522.orp-1.colaboradores.labgerencianet.com.br"
+    },
+    {
+      "key": "id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "username",
+      "value": "thiago-rezende",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "thiago.manoel.rezende@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "secret",
+      "type": "string"
+    },
+    {
+      "key": "anime-id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bearer-token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
