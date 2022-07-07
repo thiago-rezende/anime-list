@@ -8,7 +8,7 @@ import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from
 import { FindOptions, WhereOptions, Op } from 'sequelize'
 import { getPaginationInfo } from '@utils/pagination'
 import { animeListItemView, animeListView } from '@views/list'
-import { addAnimeToList, getAnimeList } from '@controllers/list'
+import { addAnimeToList, getAnimeList, removeAnimeFromList } from '@controllers/list'
 import { AnimeList, AnimeListDTO } from '@models/anime_list'
 import { InvalidRequestBodyError } from '@errors/common'
 
@@ -117,6 +117,40 @@ users.put('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAn
   if (!(animeListItem instanceof AnimeList)) return next(animeListItem)
 
   res.status(200).json({ anime: animeListItemView(animeListItem) })
+})
+
+users.delete('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>, res: Response, next: NextFunction) => {
+  const username = req.params.username
+
+  const user = await getUserByUsername(username)
+
+  if (!(user instanceof User)) return next(user)
+
+  const anime = req.body.anime
+
+  const invalidRequestBody = new InvalidRequestBodyError('invalid add anime request body', [])
+
+  if (!anime) {
+    invalidRequestBody.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
+    return next(invalidRequestBody)
+  }
+  const userId = user.id
+  const animeId = anime.animeId
+
+  if (!userId || !animeId) {
+    if (!userId) invalidRequestBody.fields.push({ field: 'userId', description: 'the anime object should have an attribute \'userId\'' })
+    if (!animeId) invalidRequestBody.fields.push({ field: 'animeId', description: 'the anime object should have an attribute \'animeId\'' })
+
+    return next(invalidRequestBody)
+  }
+
+  anime.userId = userId
+
+  const result = await removeAnimeFromList(anime)
+
+  if (!result) return res.status(204).send()
+
+  next(result)
 })
 
 users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {

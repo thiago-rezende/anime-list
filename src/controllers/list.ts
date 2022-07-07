@@ -7,7 +7,7 @@ import { UserNotFoundError } from '@errors/user'
 import { AnimeNotFoundError } from '@errors/anime'
 import { getUser } from '@controllers/users'
 import { getAnime } from '@controllers/animes'
-import { CreationError } from '@errors/common'
+import { CreationError, NotFoundError } from '@errors/common'
 
 export async function getAnimeList(user: User, options: FindOptions): Promise<{ rows: Array<AnimeList>, count: number }> {
   options.where = { ...options.where, userId: user.id }
@@ -36,4 +36,20 @@ export async function addAnimeToList(data: AnimeListDTO): Promise<AnimeList | Us
   }
 
   return listItem
+}
+
+export async function removeAnimeFromList(data: AnimeListDTO): Promise<void | UserNotFoundError | AnimeNotFoundError | CreationError | NotFoundError> {
+  const user = await getUser(data.userId)
+
+  if (user instanceof UserNotFoundError) return user
+
+  const anime = await getAnime(data.animeId)
+
+  if (anime instanceof AnimeNotFoundError) return anime
+
+  const item = await AnimeList.findOne({ where: { userId: user.id, animeId: anime.id } })
+
+  if (!(item instanceof AnimeList)) return new NotFoundError('anime not on your list')
+
+  await item.destroy()
 }
