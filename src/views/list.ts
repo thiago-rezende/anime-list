@@ -1,4 +1,6 @@
-import { User } from '@models/user'
+import { AnimeList } from '@models/anime_list'
+import { Model } from 'sequelize-typescript'
+import { PaginationInfo } from '@utils/pagination'
 
 export interface AnimeListItemView {
   id: string,
@@ -15,29 +17,38 @@ export interface AnimeListItemView {
 }
 
 export interface AnimeListView {
-  animes: Array<AnimeListItemView>
+  animes: Array<AnimeListItemView>,
+  page?: number,
+  pageSize?: number,
+  totalPages?: number,
+  totalItems?: number
 }
 
-export function animeListView(user: User): AnimeListView | undefined {
-  const animeList = user.animes
+type AnimeListViewData<M extends Model> = { rows: Array<M>, count: number }
 
-  if (!animeList) return undefined
-
+export function animeListView(list: AnimeListViewData<AnimeList>, paginationInfo?: PaginationInfo): AnimeListView {
   const view: AnimeListView = { animes: [] }
 
-  animeList.forEach((anime) => {
+  if (paginationInfo) {
+    view.page = paginationInfo.page
+    view.pageSize = paginationInfo.size
+    view.totalPages = Math.ceil(list.count / paginationInfo.limit)
+    view.totalItems = list.count
+  }
+
+  list.rows.forEach((anime) => {
     view.animes.push({
-      id: anime.AnimeList.id,
-      userId: anime.AnimeList.userId,
-      animeId: anime.AnimeList.animeId,
-      name: anime.name,
-      slug: anime.slug,
-      native: anime.native,
-      romaji: anime.romaji,
-      synopsis: anime.synopsis,
-      releaseDate: anime.releaseDate,
-      startedAt: anime.AnimeList.startedAt,
-      finishedAt: anime.AnimeList.finishedAt
+      id: anime.id,
+      userId: anime.userId,
+      animeId: anime.animeId,
+      name: anime.anime.name,
+      slug: anime.anime.slug,
+      native: anime.anime.native,
+      romaji: anime.anime.romaji,
+      synopsis: anime.anime.synopsis,
+      releaseDate: anime.anime.releaseDate,
+      startedAt: anime.startedAt,
+      finishedAt: anime.finishedAt
     })
   })
 

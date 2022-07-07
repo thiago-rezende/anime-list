@@ -2,14 +2,18 @@ import { Router, Request, Response, NextFunction } from 'express'
 
 import { usersView, userView } from '@views/users'
 import { User, UserDTO } from '@models/user'
+import { Anime } from '@models/anime'
 import { InvalidUserRequestBodyError, UserCreationError } from '@errors/user'
 import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from '@controllers/users'
 import { FindOptions, WhereOptions, Op } from 'sequelize'
 import { getPaginationInfo } from '@utils/pagination'
+import { animeListView } from '@views/list'
+import { getAnimeList } from '@controllers/list'
 
 const users = Router()
 
 type ListUsersRequestQuery = { page?: string, size?: string, email?: string, username?: string }
+type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, slug?: string, native?: string, romaji?: string }
 
 type GetUserRequestParams = { username: string }
 
@@ -42,11 +46,40 @@ users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Resp
 users.get('/:username', async (req: Request<GetUserRequestParams>, res: Response, next: NextFunction) => {
   const username = req.params.username
 
-  const user = await getUserByUsername(username, true)
+  const user = await getUserByUsername(username)
 
   if (!(user instanceof User)) return next(user)
 
   res.status(200).json({ user: userView(user) })
+})
+
+users.get('/:username/list', async (req: Request<GetUserRequestParams, {}, {}, ListAnimesRequestQuery>, res: Response, next: NextFunction) => {
+  const username = req.params.username
+
+  const user = await getUserByUsername(username)
+
+  if (!(user instanceof User)) return next(user)
+
+  const page = req.query.page
+  const size = req.query.size
+  const name = req.query.name
+  const slug = req.query.slug
+  const native = req.query.native
+  const romaji = req.query.romaji
+
+  const where: WhereOptions = {}
+  if (name) where['$anime.name$'] = { [Op.like]: '%' + name + '%' }
+  if (slug) where['$anime.slug$'] = { [Op.like]: '%' + slug + '%' }
+  if (native) where['$anime.native$'] = { [Op.like]: '%' + native + '%' }
+  if (romaji) where['$anime.romaji$'] = { [Op.like]: '%' + romaji + '%' }
+
+  const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
+
+  const options: FindOptions = { where, limit: paginationInfo.limit, offset: paginationInfo.offset, include: [User, Anime] }
+
+  const list = await getAnimeList(user, options)
+
+  res.status(200).json(animeListView(list, paginationInfo))
 })
 
 users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {

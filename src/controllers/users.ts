@@ -1,20 +1,29 @@
 import { User, UserDTO } from '@models/user'
 import { UserCreationError, UserNotFoundError, UserUpdateError } from '@errors/user'
 
-import { FindOptions, ValidationError } from 'sequelize/types'
+import { FindOptions, Includeable, ValidationError } from 'sequelize'
 
-import { Anime } from '@models/anime'
+export async function getUser(id: string, include?: Includeable | Includeable[]): Promise<User | UserNotFoundError> {
+  const options: FindOptions = {
+  }
 
-export async function getUser(id: string, includeAnimes?: boolean): Promise<User | UserNotFoundError> {
-  const user = await User.findByPk(id, { include: includeAnimes ? [Anime] : [] })
+  if (include) { options.include = include }
+
+  const user = await User.findByPk(id, options)
 
   if (!user) return new UserNotFoundError('user not found')
 
   return user
 }
 
-export async function getUserByUsername(username: string, includeAnimes?: boolean): Promise<User | UserNotFoundError> {
-  const user = await User.findOne({ where: { username }, include: includeAnimes ? [Anime] : [] })
+export async function getUserByUsername(username: string, include?: Includeable | Includeable[]): Promise<User | UserNotFoundError> {
+  const options: FindOptions = {
+    where: { username }
+  }
+
+  if (include) { options.include = include }
+
+  const user = await User.findOne(options)
 
   if (!user) return new UserNotFoundError('user not found')
 
