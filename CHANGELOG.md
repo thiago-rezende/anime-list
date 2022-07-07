@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+
+## [v0.5.0]
+ - [347cc32] docs: update version number (Thiago Rezende)
+ - [9fd63a6] test: add test coverage to anime listing (Thiago Rezende)
+ - [f182d7a] feat: add list route nested to username (Thiago Rezende)
+ - [890f252] feat: add anime list view to username route (Thiago Rezende)
+ - [7d63dbe] feat: add database utility scripts and fixed database seeding problems on tests (Thiago Rezende)
+ - [80080da] feat: add AnimeList model and update username route to fetch the user anime list (Thiago Rezende)
  - [208b354] feat: add username route to users resource (Thiago Rezende)
  - [8ffd03d] feat: move all authentication and user info gathering to auth middleware (Thiago Rezende)
  - [bd42d33] docs: add changelog generator script (Thiago Rezende)
