@@ -7,6 +7,7 @@ import { users } from '@database/users'
 
 import { User } from '@models/user'
 import { UsersView } from '@views/users'
+import { AnimeListView } from '@views/list'
 
 describe('Users [v1]', () => {
   beforeAll(async () => {
@@ -51,6 +52,68 @@ describe('Users [v1]', () => {
     expect((res.body as UsersView).pageSize).toBe(1)
     expect((res.body as UsersView).totalPages).toBe(2)
     expect((res.body as UsersView).totalItems).toBe(2)
+  })
+
+  test('[GET /v1/users/:username] existing user', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .get(`/v1/users/${user.username}`)
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('user')
+  })
+
+  test('[GET /v1/users/:username] non-existing user', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .get('/v1/users/non-existing-user')
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(404)
+    expect(res.body).toHaveProperty('error')
+  })
+
+  test('[GET /v1/users/:username/list] user anime list', async () => {
+    const user: User = users[0]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .get(`/v1/users/${user.username}/list`)
+      .query({ page: 1, size: 1 })
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveProperty('animes')
+    expect(res.body).toHaveProperty('page')
+    expect(res.body).toHaveProperty('pageSize')
+    expect(res.body).toHaveProperty('totalPages')
+    expect(res.body).toHaveProperty('totalItems')
+
+    expect((res.body as AnimeListView).animes.length).toBe(1)
+    expect((res.body as AnimeListView).page).toBe(1)
+    expect((res.body as AnimeListView).pageSize).toBe(1)
+    expect((res.body as AnimeListView).totalPages).toBe(2)
+    expect((res.body as AnimeListView).totalItems).toBe(2)
   })
 
   test('[POST /v1/users] correct request body', async () => {
