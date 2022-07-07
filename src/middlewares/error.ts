@@ -54,7 +54,7 @@ const errorMiddleware = function (err: Error, _req: Request, res: Response, next
     return res.status(409).json({
       error: {
         message: err.message,
-        fields: (err as CreationError).fields,
+        fields: (err as CreationError).fields.length ? err.fields : undefined,
         name: err.name
       }
     })

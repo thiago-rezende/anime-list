@@ -1,11 +1,39 @@
 import { User } from '@models/user'
-import { AnimeList } from '@models/anime_list'
+import { Anime } from '@models/anime'
+import { AnimeList, AnimeListDTO } from '@models/anime_list'
 
-import { FindOptions } from 'sequelize'
+import { FindOptions, ValidationError } from 'sequelize'
+import { UserNotFoundError } from '@errors/user'
+import { AnimeNotFoundError } from '@errors/anime'
+import { getUser } from '@controllers/users'
+import { getAnime } from '@controllers/animes'
+import { CreationError } from '@errors/common'
 
 export async function getAnimeList(user: User, options: FindOptions): Promise<{ rows: Array<AnimeList>, count: number }> {
   options.where = { ...options.where, userId: user.id }
   const list = await AnimeList.findAndCountAll(options)
 
   return list
+}
+
+export async function addAnimeToList(data: AnimeListDTO): Promise<AnimeList | UserNotFoundError | AnimeNotFoundError | CreationError> {
+  const user = await getUser(data.userId)
+
+  if (user instanceof UserNotFoundError) return user
+
+  const anime = await getAnime(data.animeId)
+
+  if (anime instanceof AnimeNotFoundError) return anime
+
+  const listItem = AnimeList.build({ userId: user.id, animeId: anime.id, startedAt: data.startedAt, finishedAt: data.finishedAt }, { include: [Anime, User] })
+  listItem.user = user
+  listItem.anime = anime
+
+  try {
+    await listItem.save()
+  } catch (error) {
+    if (error instanceof ValidationError) return new CreationError('anime already on your list', [])
+  }
+
+  return listItem
 }

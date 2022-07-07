@@ -7,8 +7,10 @@ import { InvalidUserRequestBodyError, UserCreationError } from '@errors/user'
 import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from '@controllers/users'
 import { FindOptions, WhereOptions, Op } from 'sequelize'
 import { getPaginationInfo } from '@utils/pagination'
-import { animeListView } from '@views/list'
-import { getAnimeList } from '@controllers/list'
+import { animeListItemView, animeListView } from '@views/list'
+import { addAnimeToList, getAnimeList } from '@controllers/list'
+import { AnimeList, AnimeListDTO } from '@models/anime_list'
+import { InvalidRequestBodyError } from '@errors/common'
 
 const users = Router()
 
@@ -18,6 +20,7 @@ type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, slu
 type GetUserRequestParams = { username: string }
 
 type CreateUserRequestBody = { user: UserDTO }
+type AddAnimeToListRequestBody = { anime: AnimeListDTO }
 
 type UpdateUserRequestBody = { user: UserDTO }
 type UpdateUserRequestParams = { id: string }
@@ -80,6 +83,40 @@ users.get('/:username/list', async (req: Request<GetUserRequestParams, {}, {}, L
   const list = await getAnimeList(user, options)
 
   res.status(200).json(animeListView(list, paginationInfo))
+})
+
+users.put('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>, res: Response, next: NextFunction) => {
+  const username = req.params.username
+
+  const user = await getUserByUsername(username)
+
+  if (!(user instanceof User)) return next(user)
+
+  const anime = req.body.anime
+
+  const invalidRequestBody = new InvalidRequestBodyError('invalid add anime request body', [])
+
+  if (!anime) {
+    invalidRequestBody.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
+    return next(invalidRequestBody)
+  }
+  const userId = user.id
+  const animeId = anime.animeId
+
+  if (!userId || !animeId) {
+    if (!userId) invalidRequestBody.fields.push({ field: 'userId', description: 'the anime object should have an attribute \'userId\'' })
+    if (!animeId) invalidRequestBody.fields.push({ field: 'animeId', description: 'the anime object should have an attribute \'animeId\'' })
+
+    return next(invalidRequestBody)
+  }
+
+  anime.userId = userId
+
+  const animeListItem = await addAnimeToList(anime)
+
+  if (!(animeListItem instanceof AnimeList)) return next(animeListItem)
+
+  res.status(200).json({ anime: animeListItemView(animeListItem) })
 })
 
 users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {

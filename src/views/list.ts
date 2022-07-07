@@ -54,3 +54,21 @@ export function animeListView(list: AnimeListViewData<AnimeList>, paginationInfo
 
   return view
 }
+
+export function animeListItemView(item: AnimeList): AnimeListItemView {
+  const view: AnimeListItemView = {
+    id: item.id,
+    userId: item.userId,
+    animeId: item.animeId,
+    name: item.anime.name,
+    slug: item.anime.slug,
+    native: item.anime.native,
+    romaji: item.anime.romaji,
+    synopsis: item.anime.synopsis,
+    releaseDate: item.anime.releaseDate,
+    startedAt: item.startedAt,
+    finishedAt: item.finishedAt
+  }
+
+  return view
+}
