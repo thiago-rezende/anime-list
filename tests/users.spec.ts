@@ -138,6 +138,24 @@ describe('Users [v1]', () => {
     expect(res.body).toHaveProperty('anime')
   })
 
+  test('[DELETE /v1/users/:username/list] add anime to list', async () => {
+    const user: User = users[0]
+    const anime: Anime = animes[1]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .delete(`/v1/users/${user.username}/list`)
+      .send({ anime: { animeId: anime.id } })
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(204)
+  })
+
   test('[POST /v1/users] correct request body', async () => {
     const user: User = users[0]
 
