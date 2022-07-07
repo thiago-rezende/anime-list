@@ -4,6 +4,9 @@ import server from '@src/server'
 
 import database from '@database/index'
 import { users } from '@database/users'
+import { animes } from '@database/animes'
+
+import { Anime } from '@models/anime'
 
 import { User } from '@models/user'
 import { UsersView } from '@views/users'
@@ -112,8 +115,27 @@ describe('Users [v1]', () => {
     expect((res.body as AnimeListView).animes.length).toBe(1)
     expect((res.body as AnimeListView).page).toBe(1)
     expect((res.body as AnimeListView).pageSize).toBe(1)
-    expect((res.body as AnimeListView).totalPages).toBe(2)
-    expect((res.body as AnimeListView).totalItems).toBe(2)
+    expect((res.body as AnimeListView).totalPages).toBe(1)
+    expect((res.body as AnimeListView).totalItems).toBe(1)
+  })
+
+  test('[PUT /v1/users/:username/list] add anime to list', async () => {
+    const user: User = users[0]
+    const anime: Anime = animes[1]
+
+    const auth = await request(server)
+      .post('/auth')
+      .send({ user: { email: user.email, password: user.password } })
+
+    const accessToken = auth.body.access_token
+
+    const res = await request(server)
+      .put(`/v1/users/${user.username}/list`)
+      .send({ anime: { animeId: anime.id, startedAt: new Date() } })
+      .set('Authorization', 'Bearer ' + accessToken)
+
+    expect(res.statusCode).toBe(201)
+    expect(res.body).toHaveProperty('anime')
   })
 
   test('[POST /v1/users] correct request body', async () => {

@@ -116,7 +116,7 @@ users.put('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAn
 
   if (!(animeListItem instanceof AnimeList)) return next(animeListItem)
 
-  res.status(200).json({ anime: animeListItemView(animeListItem) })
+  res.status(201).json({ anime: animeListItemView(animeListItem) })
 })
 
 users.delete('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>, res: Response, next: NextFunction) => {
