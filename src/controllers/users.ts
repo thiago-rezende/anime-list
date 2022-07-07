@@ -5,16 +5,16 @@ import { FindOptions, ValidationError } from 'sequelize/types'
 
 import { Anime } from '@models/anime'
 
-export async function getUser(id: string): Promise<User | UserNotFoundError> {
-  const user = await User.findByPk(id)
+export async function getUser(id: string, includeAnimes?: boolean): Promise<User | UserNotFoundError> {
+  const user = await User.findByPk(id, { include: includeAnimes ? [Anime] : [] })
 
   if (!user) return new UserNotFoundError('user not found')
 
   return user
 }
 
-export async function getUserByUsername(username: string): Promise<User | UserNotFoundError> {
-  const user = await User.findOne({ where: { username }, include: [Anime] })
+export async function getUserByUsername(username: string, includeAnimes?: boolean): Promise<User | UserNotFoundError> {
+  const user = await User.findOne({ where: { username }, include: includeAnimes ? [Anime] : [] })
 
   if (!user) return new UserNotFoundError('user not found')
 

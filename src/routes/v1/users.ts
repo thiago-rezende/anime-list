@@ -42,7 +42,7 @@ users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Resp
 users.get('/:username', async (req: Request<GetUserRequestParams>, res: Response, next: NextFunction) => {
   const username = req.params.username
 
-  const user = await getUserByUsername(username)
+  const user = await getUserByUsername(username, true)
 
   if (!(user instanceof User)) return next(user)
 

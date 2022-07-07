@@ -4,7 +4,7 @@ import { User } from '@models/user'
 import { Anime } from '@models/anime'
 
 @Table({
-  tableName: 'anime_list'
+  tableName: 'list'
 })
 export class AnimeList extends Model {
   @IsUUID(4)

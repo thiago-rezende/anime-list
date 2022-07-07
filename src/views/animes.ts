@@ -14,26 +14,40 @@ export interface AnimeView {
 
 export interface AnimesView {
   animes: Array<AnimeView>,
-  page: number,
-  pageSize: number,
-  totalPages: number,
-  totalItems: number
+  page?: number,
+  pageSize?: number,
+  totalPages?: number,
+  totalItems?: number
 }
 
 type AnimesViewData<M extends Model> = { rows: Array<M>, count: number }
 
-export function animesView(data: AnimesViewData<Anime>, paginationInfo: PaginationInfo): AnimesView {
-  const view: AnimesView = {
-    animes: [],
-    page: paginationInfo.page,
-    pageSize: paginationInfo.size,
-    totalPages: Math.ceil(data.count / paginationInfo.limit),
-    totalItems: data.count
-  }
+export function animesView(data: AnimesViewData<Anime> | Array<Anime>, paginationInfo?: PaginationInfo): AnimesView {
+  let view: AnimesView
 
-  data.rows.forEach(anime => {
-    view.animes.push(animeView(anime))
-  })
+  if (paginationInfo && !(data instanceof Array<Anime>)) {
+    view = {
+      animes: [],
+      page: paginationInfo.page,
+      pageSize: paginationInfo.size,
+      totalPages: Math.ceil(data.count / paginationInfo.limit),
+      totalItems: data.count
+    }
+
+    data.rows.forEach(anime => {
+      view.animes.push(animeView(anime))
+    })
+  } else {
+    view = {
+      animes: []
+    }
+
+    const animes: Array<Anime> = data as Array<Anime>
+
+    animes.forEach(anime => {
+      view.animes.push(animeView(anime))
+    })
+  }
 
   return view
 }

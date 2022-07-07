@@ -1,14 +1,14 @@
 import { User } from '@models/user'
-import { Anime } from '@models/anime'
 import { PaginationInfo } from '@utils/pagination'
 import { Model } from 'sequelize-typescript'
+import { AnimeListItemView, animeListView } from '@views/list'
 
 export interface UserView {
   id: string,
   username: string,
   email: string,
   password?: string,
-  animes?: Array<Anime>
+  animes?: Array<AnimeListItemView> | undefined
 }
 
 export interface UsersView {
@@ -38,10 +38,11 @@ export function usersView(data: UsersViewData<User>, paginationInfo: PaginationI
 }
 
 export function userView(user: User): UserView {
+  const animeList = animeListView(user)
   return {
     id: user.id,
     username: user.username,
     email: user.email,
-    animes: user.animes
+    animes: animeList ? animeList.animes : undefined
   }
 }

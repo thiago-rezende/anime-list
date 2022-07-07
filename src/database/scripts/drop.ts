@@ -6,7 +6,11 @@ import config from '@config/database'
 
   sequelize.options.logging = console.log
 
-  await sequelize.getQueryInterface().dropDatabase(config.database as string)
+  try {
+    await sequelize.getQueryInterface().dropDatabase(config.database as string)
+  } catch (error) {
+    console.log(`[database] <drop> database '${config.database}' not found`)
+  }
 
   await sequelize.close()
 })()
