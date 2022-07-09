@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+ - [5e92f90] fix: remove direct inclision of jwt config file on key generator (Thiago Rezende)
+ - [e56dc53] ci: add step to generate certificates before test (Thiago Rezende)
+ - [33ec822] chore: move database scripts to scripts folder and add changed key pair generator to typescript (Thiago Rezende)
+ - [60c781c] docs: generate new changelog (Thiago Rezende)
  - [914478b] docs: add postman collection (Thiago Rezende)
 
 ## [v1.0.0]
