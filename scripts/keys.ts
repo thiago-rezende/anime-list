@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs'
 import { generateKeyPair } from 'crypto'
 
-import config from '@config/jwt'
+const passphrase = process.env.PASSPHRASE || 'secret'
 
 type Command = 'generate'
 
@@ -23,7 +23,7 @@ switch (command) {
         type: 'pkcs8',
         format: 'pem',
         cipher: 'aes-256-cbc',
-        passphrase: config.passphrase
+        passphrase
       }
     }, (_err, publicKey, privateKey) => {
       writeFileSync('certs/jwtRS256.pem', publicKey)
