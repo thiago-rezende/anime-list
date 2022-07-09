@@ -9,11 +9,12 @@
   "private": true,
   "scripts": {
     "watch": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --quiet --transpile-only src/index.ts",
-    "db:create": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/create.ts",
-    "db:drop": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/drop.ts",
-    "db:sync": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/sync.ts",
-    "db:seed": "ts-node -r dotenv/config -r tsconfig-paths/register src/database/scripts/seed.ts",
+    "db:create": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/create.ts",
+    "db:drop": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/drop.ts",
+    "db:sync": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/sync.ts",
+    "db:seed": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/seed.ts",
     "db:setup": "yarn db:drop && yarn db:create && yarn db:sync && yarn db:seed",
+    "keys:generate": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/keys.ts generate",
     "start": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
     "test": "jest --setupFiles dotenv/config --verbose --silent --runInBand",
     "lint": "eslint src/**/*.ts"
