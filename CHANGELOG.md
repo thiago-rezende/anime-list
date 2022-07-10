@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+ - [07cefbb] docs: update badges version numbers to include minor value (Thiago Rezende)
+ - [d252997] chore: update moment package to fix inefficient regular expression complexity (Thiago Rezende)
+ - [e24c7ea] docs: generate new changelog (Thiago Rezende)
  - [5e92f90] fix: remove direct inclision of jwt config file on key generator (Thiago Rezende)
  - [e56dc53] ci: add step to generate certificates before test (Thiago Rezende)
  - [33ec822] chore: move database scripts to scripts folder and add changed key pair generator to typescript (Thiago Rezende)
