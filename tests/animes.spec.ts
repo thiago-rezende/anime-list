@@ -208,7 +208,7 @@ describe('Animes [v1]', () => {
     expect(res.body).toHaveProperty('anime')
   })
 
-  test('[PATCH /v1/users/:id] non-unique new fields', async () => {
+  test('[PATCH /v1/animes/:id] non-unique new fields', async () => {
     const user: User = users[0]
     const anime: Anime = animes[0]
     const otherAnime: Anime = animes[1]
