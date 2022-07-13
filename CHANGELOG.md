@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+ - [bd581fa] refactor: server creation and startup cleanup (Thiago Rezende)
+ - [7052a3b] docs: update anime-list-url default value on postman_collection.json (Thiago Rezende)
+ - [a94b7bf] test: fix test naming on animes test suite (Thiago Rezende)
+ - [31a4e41] chore: generate new changelog (Thiago Rezende)
  - [07cefbb] docs: update badges version numbers to include minor value (Thiago Rezende)
  - [d252997] chore: update moment package to fix inefficient regular expression complexity (Thiago Rezende)
  - [e24c7ea] docs: generate new changelog (Thiago Rezende)
