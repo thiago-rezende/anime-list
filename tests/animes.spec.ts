@@ -1,6 +1,6 @@
 import request from 'supertest'
 
-import server from '@src/server'
+import { createServer } from '@src/server'
 
 import database from '@database/index'
 import { users } from '@database/users'
@@ -9,6 +9,8 @@ import { animes } from '@database/animes'
 import { User } from '@models/user'
 import { Anime } from '@models/anime'
 import { AnimesView } from '@views/animes'
+
+const server = createServer()
 
 describe('Animes [v1]', () => {
   beforeAll(async () => {

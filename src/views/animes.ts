@@ -25,16 +25,16 @@ type AnimesViewData<M extends Model> = { rows: Array<M>, count: number }
 export function animesView(data: AnimesViewData<Anime> | Array<Anime>, paginationInfo?: PaginationInfo): AnimesView {
   let view: AnimesView
 
-  if (paginationInfo && !(data instanceof Array<Anime>)) {
+  if (paginationInfo && !(data instanceof Array)) {
     view = {
       animes: [],
       page: paginationInfo.page,
       pageSize: paginationInfo.size,
-      totalPages: Math.ceil(data.count / paginationInfo.limit),
-      totalItems: data.count
-    }
+      totalPages: Math.ceil((data as AnimesViewData<Anime>).count / paginationInfo.limit),
+      totalItems: (data as AnimesViewData<Anime>).count
+    };
 
-    data.rows.forEach(anime => {
+    (data as AnimesViewData<Anime>).rows.forEach(anime => {
       view.animes.push(animeView(anime))
     })
   } else {

@@ -1,11 +1,13 @@
 import request from 'supertest'
 
-import server from '@src/server'
+import { createServer } from '@src/server'
 
 import database from '@database/index'
 import { users } from '@database/users'
 
 import { User } from '@models/user'
+
+const server = createServer()
 
 describe('Authentication', () => {
   beforeAll(async () => {

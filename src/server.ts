@@ -1,17 +1,13 @@
-import express from 'express'
+import express, { Express } from 'express'
 
 import authMiddleware from '@middlewares/auth'
 import errorMiddleware from '@middlewares/error'
 
 import router from './router'
 
-const server = express()
+export function createServer(): Express {
+  const server = express()
 
-function start(port: number | string, cb: () => void) {
-  server.listen(port, cb)
-}
-
-export default (() => {
   server.use(express.json())
   server.use(express.urlencoded({ extended: true }))
 
@@ -22,6 +18,4 @@ export default (() => {
   server.use(errorMiddleware)
 
   return server
-})()
-
-export { start }
+}
