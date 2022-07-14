@@ -1,5 +1,5 @@
 {
-  "name": "anime-list",
+  "name": "@anime-list/api",
   "version": "1.3.0",
   "description": "Anime listing made simple",
   "repository": "https://github.com/thiago-rezende/anime-list",
