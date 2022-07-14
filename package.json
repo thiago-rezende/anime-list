@@ -7,6 +7,12 @@
   "license": "BSD-3-Clause",
   "main": "dist/server.js",
   "bin": "dist/index.js",
+  "keywords": [
+    "api",
+    "rest",
+    "anime",
+    "listing"
+  ],
   "scripts": {
     "watch": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --quiet --transpile-only src/index.ts",
     "keys:generate": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/keys.ts generate",
