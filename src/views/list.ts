@@ -1,39 +1,42 @@
-import { AnimeList } from '~/models/anime_list'
-import { Model } from 'sequelize-typescript'
-import { PaginationInfo } from '~/utils/pagination'
+import { AnimeList } from '~/models/anime_list';
+import { Model } from 'sequelize-typescript';
+import { PaginationInfo } from '~/utils/pagination';
 
 export interface AnimeListItemView {
-  id: string,
-  userId: string,
-  animeId: string,
-  name: string,
-  slug: string,
-  native: string,
-  romaji: string,
-  synopsis: string,
-  releaseDate: Date,
-  startedAt?: Date,
-  finishedAt?: Date
+  id: string;
+  userId: string;
+  animeId: string;
+  name: string;
+  slug: string;
+  native: string;
+  romaji: string;
+  synopsis: string;
+  releaseDate: Date;
+  startedAt?: Date;
+  finishedAt?: Date;
 }
 
 export interface AnimeListView {
-  animes: Array<AnimeListItemView>,
-  page?: number,
-  pageSize?: number,
-  totalPages?: number,
-  totalItems?: number
+  animes: Array<AnimeListItemView>;
+  page?: number;
+  pageSize?: number;
+  totalPages?: number;
+  totalItems?: number;
 }
 
-type AnimeListViewData<M extends Model> = { rows: Array<M>, count: number }
+type AnimeListViewData<M extends Model> = { rows: Array<M>; count: number };
 
-export function animeListView(list: AnimeListViewData<AnimeList>, paginationInfo?: PaginationInfo): AnimeListView {
-  const view: AnimeListView = { animes: [] }
+export function animeListView(
+  list: AnimeListViewData<AnimeList>,
+  paginationInfo?: PaginationInfo
+): AnimeListView {
+  const view: AnimeListView = { animes: [] };
 
   if (paginationInfo) {
-    view.page = paginationInfo.page
-    view.pageSize = paginationInfo.size
-    view.totalPages = Math.ceil(list.count / paginationInfo.limit)
-    view.totalItems = list.count
+    view.page = paginationInfo.page;
+    view.pageSize = paginationInfo.size;
+    view.totalPages = Math.ceil(list.count / paginationInfo.limit);
+    view.totalItems = list.count;
   }
 
   list.rows.forEach((anime) => {
@@ -49,10 +52,10 @@ export function animeListView(list: AnimeListViewData<AnimeList>, paginationInfo
       releaseDate: anime.anime.releaseDate,
       startedAt: anime.startedAt,
       finishedAt: anime.finishedAt
-    })
-  })
+    });
+  });
 
-  return view
+  return view;
 }
 
 export function animeListItemView(item: AnimeList): AnimeListItemView {
@@ -68,7 +71,7 @@ export function animeListItemView(item: AnimeList): AnimeListItemView {
     releaseDate: item.anime.releaseDate,
     startedAt: item.startedAt,
     finishedAt: item.finishedAt
-  }
+  };
 
-  return view
+  return view;
 }

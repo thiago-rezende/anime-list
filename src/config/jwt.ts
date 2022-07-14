@@ -1,13 +1,13 @@
-import { readFileSync } from 'fs'
+import { readFileSync } from 'fs';
 
-import { Algorithm } from 'jsonwebtoken'
+import { Algorithm } from 'jsonwebtoken';
 
 export interface JwtConfig {
-  passphrase: string
-  privateKey: Buffer
-  publicKey: Buffer
-  algorithm: Algorithm
-  expiresIn: string
+  passphrase: string;
+  privateKey: Buffer;
+  publicKey: Buffer;
+  algorithm: Algorithm;
+  expiresIn: string;
 }
 
 const jwt: JwtConfig = {
@@ -16,6 +16,6 @@ const jwt: JwtConfig = {
   publicKey: readFileSync('certs/jwtRS256.pem'),
   algorithm: 'RS256',
   expiresIn: '2h'
-}
+};
 
-export default jwt
+export default jwt;

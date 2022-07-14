@@ -1,18 +1,19 @@
-import database, { sequelize } from '~/database/index'
-import config from '~/config/database'
+import database, { sequelize } from '~/database/index';
+import config from '~/config/database';
 
-import { DatabaseError } from 'sequelize'
-
+import { DatabaseError } from 'sequelize';
 (async () => {
-  console.log(`[database] <seed> seeding '${config.database}' database`)
+  console.log(`[database] <seed> seeding '${config.database}' database`);
 
-  sequelize.options.logging = console.log
+  sequelize.options.logging = console.log;
 
   try {
-    await database.seed()
+    await database.seed();
   } catch (error) {
-    if (error instanceof DatabaseError) console.log(`[database] <${error.name}> ${error.message}`)
+    if (error instanceof DatabaseError) {
+      console.log(`[database] <${error.name}> ${error.message}`);
+    }
   }
 
-  await sequelize.close()
-})()
+  await sequelize.close();
+})();

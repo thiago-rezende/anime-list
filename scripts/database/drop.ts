@@ -1,16 +1,15 @@
-import { sequelize } from '~/database/index'
-import config from '~/config/database'
-
+import { sequelize } from '~/database/index';
+import config from '~/config/database';
 (async () => {
-  console.log(`[database] <drop> dropping '${config.database}' database`)
+  console.log(`[database] <drop> dropping '${config.database}' database`);
 
-  sequelize.options.logging = console.log
+  sequelize.options.logging = console.log;
 
   try {
-    await sequelize.getQueryInterface().dropDatabase(config.database as string)
+    await sequelize.getQueryInterface().dropDatabase(config.database as string);
   } catch (error) {
-    console.log(`[database] <drop> database '${config.database}' not found`)
+    console.log(`[database] <drop> database '${config.database}' not found`);
   }
 
-  await sequelize.close()
-})()
+  await sequelize.close();
+})();

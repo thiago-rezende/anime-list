@@ -1,11 +1,10 @@
-import { Sequelize } from '~/database/index'
+import { Sequelize } from '~/database/index';
 
-import config from '~/config/database'
+import config from '~/config/database';
 
-import { Dialect } from 'sequelize'
-
+import { Dialect } from 'sequelize';
 (async () => {
-  console.log(`[database] <create> creating '${config.database}' database`)
+  console.log(`[database] <create> creating '${config.database}' database`);
 
   const sequelize = new Sequelize({
     username: config.username as string,
@@ -13,9 +12,14 @@ import { Dialect } from 'sequelize'
     dialect: config.dialect as Dialect,
     host: config.host as string,
     logging: console.log
-  })
+  });
 
-  await sequelize.getQueryInterface().createDatabase(config.database as string, { charset: 'utf32', collate: 'utf32_general_ci' })
+  await sequelize
+    .getQueryInterface()
+    .createDatabase(config.database as string, {
+      charset: 'utf32',
+      collate: 'utf32_general_ci'
+    });
 
-  await sequelize.close()
-})()
+  await sequelize.close();
+})();

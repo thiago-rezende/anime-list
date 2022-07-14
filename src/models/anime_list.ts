@@ -1,7 +1,17 @@
-import { Table, Column, Model, PrimaryKey, IsUUID, Default, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript'
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  IsUUID,
+  Default,
+  DataType,
+  ForeignKey,
+  BelongsTo
+} from 'sequelize-typescript';
 
-import { User } from '~/models/user'
-import { Anime } from '~/models/anime'
+import { User } from '~/models/user';
+import { Anime } from '~/models/anime';
 
 @Table({
   tableName: 'list'
@@ -11,33 +21,33 @@ export class AnimeList extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column
-  declare id: string
+  declare id: string;
 
   @ForeignKey(() => User)
   @Column
-  declare userId: string
+  declare userId: string;
 
   @BelongsTo(() => User)
-  declare user: User
+  declare user: User;
 
   @ForeignKey(() => Anime)
   @Column
-  declare animeId: string
+  declare animeId: string;
 
   @BelongsTo(() => Anime)
-  declare anime: Anime
+  declare anime: Anime;
 
   @Column(DataType.DATEONLY)
-  declare startedAt: Date
+  declare startedAt: Date;
 
   @Column(DataType.DATEONLY)
-  declare finishedAt: Date
+  declare finishedAt: Date;
 }
 
 export interface AnimeListDTO {
-  id?: string
-  userId: string,
-  animeId: string,
-  startedAt?: Date,
-  finishedAt?: Date
+  id?: string;
+  userId: string;
+  animeId: string;
+  startedAt?: Date;
+  finishedAt?: Date;
 }

@@ -1,55 +1,59 @@
-import { Anime } from '~/models/anime'
-import { PaginationInfo } from '~/utils/pagination'
-import { Model } from 'sequelize-typescript'
+import { Anime } from '~/models/anime';
+import { PaginationInfo } from '~/utils/pagination';
+import { Model } from 'sequelize-typescript';
 
 export interface AnimeView {
-  id: string,
-  name: string,
-  slug: string,
-  native: string,
-  romaji: string,
-  synopsis: string,
-  releaseDate: Date
+  id: string;
+  name: string;
+  slug: string;
+  native: string;
+  romaji: string;
+  synopsis: string;
+  releaseDate: Date;
 }
 
 export interface AnimesView {
-  animes: Array<AnimeView>,
-  page?: number,
-  pageSize?: number,
-  totalPages?: number,
-  totalItems?: number
+  animes: Array<AnimeView>;
+  page?: number;
+  pageSize?: number;
+  totalPages?: number;
+  totalItems?: number;
 }
 
-type AnimesViewData<M extends Model> = { rows: Array<M>, count: number }
+type AnimesViewData<M extends Model> = { rows: Array<M>; count: number };
 
-export function animesView(data: AnimesViewData<Anime> | Array<Anime>, paginationInfo?: PaginationInfo): AnimesView {
-  let view: AnimesView
+export function animesView(
+  data: AnimesViewData<Anime> | Array<Anime>,
+  paginationInfo?: PaginationInfo
+): AnimesView {
+  let view: AnimesView;
 
   if (paginationInfo && !(data instanceof Array)) {
     view = {
       animes: [],
       page: paginationInfo.page,
       pageSize: paginationInfo.size,
-      totalPages: Math.ceil((data as AnimesViewData<Anime>).count / paginationInfo.limit),
+      totalPages: Math.ceil(
+        (data as AnimesViewData<Anime>).count / paginationInfo.limit
+      ),
       totalItems: (data as AnimesViewData<Anime>).count
     };
-
-    (data as AnimesViewData<Anime>).rows.forEach(anime => {
-      view.animes.push(animeView(anime))
-    })
+    (data as AnimesViewData<Anime>).rows.forEach((anime) => {
+      view.animes.push(animeView(anime));
+    });
   } else {
     view = {
       animes: []
-    }
+    };
 
-    const animes: Array<Anime> = data as Array<Anime>
+    const animes: Array<Anime> = data as Array<Anime>;
 
-    animes.forEach(anime => {
-      view.animes.push(animeView(anime))
-    })
+    animes.forEach((anime) => {
+      view.animes.push(animeView(anime));
+    });
   }
 
-  return view
+  return view;
 }
 
 export function animeView(anime: Anime): AnimeView {
@@ -61,5 +65,5 @@ export function animeView(anime: Anime): AnimeView {
     romaji: anime.romaji,
     synopsis: anime.synopsis,
     releaseDate: anime.releaseDate
-  }
+  };
 }

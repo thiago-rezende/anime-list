@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+ - [09c3620] chore: update tsconfig (Thiago Rezende)
+ - [f749691] test: fix jest tsconfig (Thiago Rezende)
+ - [df574c0] chore: add tsconfig to scripts folder (Thiago Rezende)
+ - [583d9e9] chore: update main and bin properties on package.json (Thiago Rezende)
+ - [5e1950d] ci: add build step (Thiago Rezende)
+ - [a31c8a7] build: add build script and tspaths resolver (Thiago Rezende)
+ - [9be518f] refactor: removed unnecessary tscofig paths and add re-exports to middlewares (Thiago Rezende)
+ - [1be7d0f] docs: generate new changelog (Thiago Rezende)
  - [bd581fa] refactor: server creation and startup cleanup (Thiago Rezende)
  - [7052a3b] docs: update anime-list-url default value on postman_collection.json (Thiago Rezende)
  - [a94b7bf] test: fix test naming on animes test suite (Thiago Rezende)

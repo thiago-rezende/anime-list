@@ -1,12 +1,25 @@
-import { Table, Column, Model, Unique, PrimaryKey, IsUUID, Default, DataType, Is, BelongsToMany } from 'sequelize-typescript'
+import {
+  Table,
+  Column,
+  Model,
+  Unique,
+  PrimaryKey,
+  IsUUID,
+  Default,
+  DataType,
+  Is,
+  BelongsToMany
+} from 'sequelize-typescript';
 
-import { email as emailRegex } from '~/utils/regex'
-import { EmailValidationError } from '~/errors/common'
-import { Anime } from '~/models/anime'
-import { AnimeList } from '~/models/anime_list'
+import { email as emailRegex } from '~/utils/regex';
+import { EmailValidationError } from '~/errors/common';
+import { Anime } from '~/models/anime';
+import { AnimeList } from '~/models/anime_list';
 
 function emailValidator(value: string) {
-  if (!emailRegex.test(value)) { throw new EmailValidationError('invalid email address') }
+  if (!emailRegex.test(value)) {
+    throw new EmailValidationError('invalid email address');
+  }
 }
 
 @Table({
@@ -17,27 +30,27 @@ export class User extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column
-  declare id: string
+  declare id: string;
 
   @Unique
   @Is('email', emailValidator)
   @Column
-  declare email: string
+  declare email: string;
 
   @Unique
   @Column
-  declare username: string
+  declare username: string;
 
   @Column
-  declare password: string
+  declare password: string;
 
   @BelongsToMany(() => Anime, () => AnimeList)
-  declare animes: Array<Anime & { AnimeList: AnimeList }>
+  declare animes: Array<Anime & { AnimeList: AnimeList }>;
 }
 
 export interface UserDTO {
-  id?: string
-  email: string,
-  username: string,
-  password: string
+  id?: string;
+  email: string;
+  username: string;
+  password: string;
 }

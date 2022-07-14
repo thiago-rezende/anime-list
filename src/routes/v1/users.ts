@@ -1,210 +1,353 @@
-import { Router, Request, Response, NextFunction } from 'express'
+import { Router, Request, Response, NextFunction } from 'express';
 
-import { usersView, userView } from '~/views/users'
-import { User, UserDTO } from '~/models/user'
-import { Anime } from '~/models/anime'
-import { InvalidUserRequestBodyError, UserCreationError } from '~/errors/user'
-import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from '~/controllers/users'
-import { FindOptions, WhereOptions, Op } from 'sequelize'
-import { getPaginationInfo } from '~/utils/pagination'
-import { animeListItemView, animeListView } from '~/views/list'
-import { addAnimeToList, getAnimeList, removeAnimeFromList } from '~/controllers/list'
-import { AnimeList, AnimeListDTO } from '~/models/anime_list'
-import { InvalidRequestBodyError } from '~/errors/common'
+import { usersView, userView } from '~/views/users';
+import { User, UserDTO } from '~/models/user';
+import { Anime } from '~/models/anime';
+import { InvalidUserRequestBodyError, UserCreationError } from '~/errors/user';
+import {
+  createUser,
+  deleteUser,
+  listUsers,
+  updateUser,
+  getUserByUsername
+} from '~/controllers/users';
+import { FindOptions, WhereOptions, Op } from 'sequelize';
+import { getPaginationInfo } from '~/utils/pagination';
+import { animeListItemView, animeListView } from '~/views/list';
+import {
+  addAnimeToList,
+  getAnimeList,
+  removeAnimeFromList
+} from '~/controllers/list';
+import { AnimeList, AnimeListDTO } from '~/models/anime_list';
+import { InvalidRequestBodyError } from '~/errors/common';
 
-const users = Router()
+const users = Router();
 
-type ListUsersRequestQuery = { page?: string, size?: string, email?: string, username?: string }
-type ListAnimesRequestQuery = { page?: string, size?: string, name?: string, slug?: string, native?: string, romaji?: string }
+type ListUsersRequestQuery = {
+  page?: string;
+  size?: string;
+  email?: string;
+  username?: string;
+};
+type ListAnimesRequestQuery = {
+  page?: string;
+  size?: string;
+  name?: string;
+  slug?: string;
+  native?: string;
+  romaji?: string;
+};
 
-type GetUserRequestParams = { username: string }
+type GetUserRequestParams = { username: string };
 
-type CreateUserRequestBody = { user: UserDTO }
-type AddAnimeToListRequestBody = { anime: AnimeListDTO }
+type CreateUserRequestBody = { user: UserDTO };
+type AddAnimeToListRequestBody = { anime: AnimeListDTO };
 
-type UpdateUserRequestBody = { user: UserDTO }
-type UpdateUserRequestParams = { id: string }
+type UpdateUserRequestBody = { user: UserDTO };
+type UpdateUserRequestParams = { id: string };
 
-type DeleteUserRequestParams = { id: string }
+type DeleteUserRequestParams = { id: string };
 
-users.get('/', async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Response) => {
-  const page = req.query.page
-  const size = req.query.size
-  const email = req.query.email
-  const username = req.query.username
+users.get(
+  '/',
+  async (req: Request<{}, {}, {}, ListUsersRequestQuery>, res: Response) => {
+    const page = req.query.page;
+    const size = req.query.size;
+    const email = req.query.email;
+    const username = req.query.username;
 
-  const where: WhereOptions = {}
+    const where: WhereOptions = {};
 
-  if (email) where.email = { [Op.like]: '%' + email + '%' }
-  if (username) where.username = { [Op.like]: '%' + username + '%' }
+    if (email) where.email = { [Op.like]: '%' + email + '%' };
+    if (username) where.username = { [Op.like]: '%' + username + '%' };
 
-  const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
-  const options: FindOptions = { where, limit: paginationInfo.limit, offset: paginationInfo.offset }
+    const paginationInfo = getPaginationInfo(
+      Number.parseInt(page as string),
+      Number.parseInt(size as string)
+    );
+    const options: FindOptions = {
+      where,
+      limit: paginationInfo.limit,
+      offset: paginationInfo.offset
+    };
 
-  const users = await listUsers(options)
+    const users = await listUsers(options);
 
-  res.status(200).json(usersView(users, paginationInfo))
-})
-
-users.get('/:username', async (req: Request<GetUserRequestParams>, res: Response, next: NextFunction) => {
-  const username = req.params.username
-
-  const user = await getUserByUsername(username)
-
-  if (!(user instanceof User)) return next(user)
-
-  res.status(200).json({ user: userView(user) })
-})
-
-users.get('/:username/list', async (req: Request<GetUserRequestParams, {}, {}, ListAnimesRequestQuery>, res: Response, next: NextFunction) => {
-  const username = req.params.username
-
-  const user = await getUserByUsername(username)
-
-  if (!(user instanceof User)) return next(user)
-
-  const page = req.query.page
-  const size = req.query.size
-  const name = req.query.name
-  const slug = req.query.slug
-  const native = req.query.native
-  const romaji = req.query.romaji
-
-  const where: WhereOptions = {}
-  if (name) where['$anime.name$'] = { [Op.like]: '%' + name + '%' }
-  if (slug) where['$anime.slug$'] = { [Op.like]: '%' + slug + '%' }
-  if (native) where['$anime.native$'] = { [Op.like]: '%' + native + '%' }
-  if (romaji) where['$anime.romaji$'] = { [Op.like]: '%' + romaji + '%' }
-
-  const paginationInfo = getPaginationInfo(Number.parseInt(page as string), Number.parseInt(size as string))
-
-  const options: FindOptions = { where, limit: paginationInfo.limit, offset: paginationInfo.offset, include: [User, Anime] }
-
-  const list = await getAnimeList(user, options)
-
-  res.status(200).json(animeListView(list, paginationInfo))
-})
-
-users.put('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>, res: Response, next: NextFunction) => {
-  const username = req.params.username
-
-  const user = await getUserByUsername(username)
-
-  if (!(user instanceof User)) return next(user)
-
-  const anime = req.body.anime
-
-  const invalidRequestBody = new InvalidRequestBodyError('invalid add anime request body', [])
-
-  if (!anime) {
-    invalidRequestBody.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
-    return next(invalidRequestBody)
+    res.status(200).json(usersView(users, paginationInfo));
   }
-  const userId = user.id
-  const animeId = anime.animeId
+);
 
-  if (!userId || !animeId) {
-    if (!userId) invalidRequestBody.fields.push({ field: 'userId', description: 'the anime object should have an attribute \'userId\'' })
-    if (!animeId) invalidRequestBody.fields.push({ field: 'animeId', description: 'the anime object should have an attribute \'animeId\'' })
+users.get(
+  '/:username',
+  async (
+    req: Request<GetUserRequestParams>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const username = req.params.username;
 
-    return next(invalidRequestBody)
+    const user = await getUserByUsername(username);
+
+    if (!(user instanceof User)) return next(user);
+
+    res.status(200).json({ user: userView(user) });
   }
+);
 
-  anime.userId = userId
+users.get(
+  '/:username/list',
+  async (
+    req: Request<GetUserRequestParams, {}, {}, ListAnimesRequestQuery>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const username = req.params.username;
 
-  const animeListItem = await addAnimeToList(anime)
+    const user = await getUserByUsername(username);
 
-  if (!(animeListItem instanceof AnimeList)) return next(animeListItem)
+    if (!(user instanceof User)) return next(user);
 
-  res.status(201).json({ anime: animeListItemView(animeListItem) })
-})
+    const page = req.query.page;
+    const size = req.query.size;
+    const name = req.query.name;
+    const slug = req.query.slug;
+    const native = req.query.native;
+    const romaji = req.query.romaji;
 
-users.delete('/:username/list', async (req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>, res: Response, next: NextFunction) => {
-  const username = req.params.username
+    const where: WhereOptions = {};
+    if (name) where['$anime.name$'] = { [Op.like]: '%' + name + '%' };
+    if (slug) where['$anime.slug$'] = { [Op.like]: '%' + slug + '%' };
+    if (native) where['$anime.native$'] = { [Op.like]: '%' + native + '%' };
+    if (romaji) where['$anime.romaji$'] = { [Op.like]: '%' + romaji + '%' };
 
-  const user = await getUserByUsername(username)
+    const paginationInfo = getPaginationInfo(
+      Number.parseInt(page as string),
+      Number.parseInt(size as string)
+    );
 
-  if (!(user instanceof User)) return next(user)
+    const options: FindOptions = {
+      where,
+      limit: paginationInfo.limit,
+      offset: paginationInfo.offset,
+      include: [User, Anime]
+    };
 
-  const anime = req.body.anime
+    const list = await getAnimeList(user, options);
 
-  const invalidRequestBody = new InvalidRequestBodyError('invalid add anime request body', [])
-
-  if (!anime) {
-    invalidRequestBody.fields.push({ field: 'anime', description: 'should have an object \'anime\'' })
-    return next(invalidRequestBody)
+    res.status(200).json(animeListView(list, paginationInfo));
   }
-  const userId = user.id
-  const animeId = anime.animeId
+);
 
-  if (!userId || !animeId) {
-    if (!userId) invalidRequestBody.fields.push({ field: 'userId', description: 'the anime object should have an attribute \'userId\'' })
-    if (!animeId) invalidRequestBody.fields.push({ field: 'animeId', description: 'the anime object should have an attribute \'animeId\'' })
+users.put(
+  '/:username/list',
+  async (
+    req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const username = req.params.username;
 
-    return next(invalidRequestBody)
+    const user = await getUserByUsername(username);
+
+    if (!(user instanceof User)) return next(user);
+
+    const anime = req.body.anime;
+
+    const invalidRequestBody = new InvalidRequestBodyError(
+      'invalid add anime request body',
+      []
+    );
+
+    if (!anime) {
+      invalidRequestBody.fields.push({
+        field: 'anime',
+        description: "should have an object 'anime'"
+      });
+      return next(invalidRequestBody);
+    }
+    const userId = user.id;
+    const animeId = anime.animeId;
+
+    if (!userId || !animeId) {
+      if (!userId)
+        invalidRequestBody.fields.push({
+          field: 'userId',
+          description: "the anime object should have an attribute 'userId'"
+        });
+      if (!animeId)
+        invalidRequestBody.fields.push({
+          field: 'animeId',
+          description: "the anime object should have an attribute 'animeId'"
+        });
+
+      return next(invalidRequestBody);
+    }
+
+    anime.userId = userId;
+
+    const animeListItem = await addAnimeToList(anime);
+
+    if (!(animeListItem instanceof AnimeList)) return next(animeListItem);
+
+    res.status(201).json({ anime: animeListItemView(animeListItem) });
   }
+);
 
-  anime.userId = userId
+users.delete(
+  '/:username/list',
+  async (
+    req: Request<GetUserRequestParams, {}, AddAnimeToListRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const username = req.params.username;
 
-  const result = await removeAnimeFromList(anime)
+    const user = await getUserByUsername(username);
 
-  if (!result) return res.status(204).send()
+    if (!(user instanceof User)) return next(user);
 
-  next(result)
-})
+    const anime = req.body.anime;
 
-users.post('/', async (req: Request<{}, {}, CreateUserRequestBody>, res: Response, next: NextFunction) => {
-  const reqUser = req.body.user
+    const invalidRequestBody = new InvalidRequestBodyError(
+      'invalid add anime request body',
+      []
+    );
 
-  const invalidCreateUserRequest = new InvalidUserRequestBodyError('invalid create user request body', [])
+    if (!anime) {
+      invalidRequestBody.fields.push({
+        field: 'anime',
+        description: "should have an object 'anime'"
+      });
+      return next(invalidRequestBody);
+    }
+    const userId = user.id;
+    const animeId = anime.animeId;
 
-  if (!reqUser) {
-    invalidCreateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
-    return next(invalidCreateUserRequest)
+    if (!userId || !animeId) {
+      if (!userId)
+        invalidRequestBody.fields.push({
+          field: 'userId',
+          description: "the anime object should have an attribute 'userId'"
+        });
+      if (!animeId)
+        invalidRequestBody.fields.push({
+          field: 'animeId',
+          description: "the anime object should have an attribute 'animeId'"
+        });
+
+      return next(invalidRequestBody);
+    }
+
+    anime.userId = userId;
+
+    const result = await removeAnimeFromList(anime);
+
+    if (!result) return res.status(204).send();
+
+    next(result);
   }
+);
 
-  const email = reqUser.email
-  const username = reqUser.username
-  const password = reqUser.password
+users.post(
+  '/',
+  async (
+    req: Request<{}, {}, CreateUserRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const reqUser = req.body.user;
 
-  if (!email || !password || !username) {
-    if (!email) invalidCreateUserRequest.fields.push({ field: 'email', description: 'the user object should have an attribute \'email\'' })
-    if (!username) invalidCreateUserRequest.fields.push({ field: 'username', description: 'the user object should have an attribute \'username\'' })
-    if (!password) invalidCreateUserRequest.fields.push({ field: 'password', description: 'the user object should have an attribute \'password\'' })
+    const invalidCreateUserRequest = new InvalidUserRequestBodyError(
+      'invalid create user request body',
+      []
+    );
 
-    return next(invalidCreateUserRequest)
+    if (!reqUser) {
+      invalidCreateUserRequest.fields.push({
+        field: 'user',
+        description: "should have an object 'user'"
+      });
+      return next(invalidCreateUserRequest);
+    }
+
+    const email = reqUser.email;
+    const username = reqUser.username;
+    const password = reqUser.password;
+
+    if (!email || !password || !username) {
+      if (!email)
+        invalidCreateUserRequest.fields.push({
+          field: 'email',
+          description: "the user object should have an attribute 'email'"
+        });
+      if (!username)
+        invalidCreateUserRequest.fields.push({
+          field: 'username',
+          description: "the user object should have an attribute 'username'"
+        });
+      if (!password)
+        invalidCreateUserRequest.fields.push({
+          field: 'password',
+          description: "the user object should have an attribute 'password'"
+        });
+
+      return next(invalidCreateUserRequest);
+    }
+
+    const user = await createUser(reqUser);
+
+    if (!(user instanceof User)) return next(user as UserCreationError);
+
+    res.status(201).json({ user: userView(user) });
   }
+);
 
-  const user = await createUser(reqUser)
+users.delete(
+  '/:id',
+  async (
+    req: Request<DeleteUserRequestParams>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const result = await deleteUser(req.params.id);
 
-  if (!(user instanceof User)) return next(user as UserCreationError)
+    if (!result) {
+      return res.status(204).send();
+    }
 
-  res.status(201).json({ user: userView(user) })
-})
-
-users.delete('/:id', async (req: Request<DeleteUserRequestParams>, res: Response, next: NextFunction) => {
-  const result = await deleteUser(req.params.id)
-
-  if (!result) { return res.status(204).send() }
-
-  return next(result)
-})
-
-users.patch('/:id', async (req: Request<UpdateUserRequestParams, {}, UpdateUserRequestBody>, res: Response, next: NextFunction) => {
-  const reqUser = req.body.user
-
-  const invalidUpdateUserRequest = new InvalidUserRequestBodyError('invalid update user request body', [])
-
-  if (!reqUser) {
-    invalidUpdateUserRequest.fields.push({ field: 'user', description: 'should have an object \'user\'' })
-    return next(invalidUpdateUserRequest)
+    return next(result);
   }
+);
 
-  const user = await updateUser(req.params.id, reqUser)
+users.patch(
+  '/:id',
+  async (
+    req: Request<UpdateUserRequestParams, {}, UpdateUserRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const reqUser = req.body.user;
 
-  if (!(user instanceof User)) return next(user)
+    const invalidUpdateUserRequest = new InvalidUserRequestBodyError(
+      'invalid update user request body',
+      []
+    );
 
-  res.status(200).send({ user: userView(user) })
-})
+    if (!reqUser) {
+      invalidUpdateUserRequest.fields.push({
+        field: 'user',
+        description: "should have an object 'user'"
+      });
+      return next(invalidUpdateUserRequest);
+    }
 
-export default users
+    const user = await updateUser(req.params.id, reqUser);
+
+    if (!(user instanceof User)) return next(user);
+
+    res.status(200).send({ user: userView(user) });
+  }
+);
+
+export default users;

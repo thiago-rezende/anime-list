@@ -1,11 +1,10 @@
-version: "3.8"
+version: '3.8'
 
-x-logging:
-  &default-logging
+x-logging: &default-logging
   driver: json-file
   options:
-    max-size: "100k"
-    max-file: "1"
+    max-size: '100k'
+    max-file: '1'
 
 networks:
   shared-services:
@@ -28,7 +27,7 @@ services:
       - DB_STORAGE=${DB_STORAGE}
       - DB_HOST=${DB_HOST}
     volumes:
-      - ".:/application"
+      - '.:/application'
     logging: *default-logging
     networks:
       - shared-services

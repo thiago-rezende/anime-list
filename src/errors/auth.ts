@@ -1,33 +1,33 @@
-import { Field } from '~/utils/fields'
-import { InvalidRequestBodyError } from '~/errors/common'
+import { Field } from '~/utils/fields';
+import { InvalidRequestBodyError } from '~/errors/common';
 
 export class AuthenticationError extends Error {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'AuthenticationError'
+    this.name = 'AuthenticationError';
   }
 }
 
 export class AuthorizationError extends Error {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'AuthorizationError'
+    this.name = 'AuthorizationError';
   }
 }
 
 export class InvalidCredentialsError extends AuthenticationError {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'InvalidCredentialsError'
+    this.name = 'InvalidCredentialsError';
   }
 }
 
 export class InvalidAuthRequestBodyError extends InvalidRequestBodyError {
   constructor(message: string, fields: Array<Field>) {
-    super(message, fields)
-    this.name = 'InvalidAuthRequestBodyError'
+    super(message, fields);
+    this.name = 'InvalidAuthRequestBodyError';
   }
 }

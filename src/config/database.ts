@@ -1,6 +1,6 @@
-import { Options, Dialect } from 'sequelize'
+import { Options, Dialect } from 'sequelize';
 
-export type DBConfig = Options
+export type DBConfig = Options;
 
 const db: DBConfig = {
   username: process.env.DB_USERNAME || '',
@@ -10,6 +10,6 @@ const db: DBConfig = {
   storage: process.env.DB_STORAGE || ':memory:',
   host: process.env.DB_HOST || '',
   logging: false
-}
+};
 
-export default db
+export default db;

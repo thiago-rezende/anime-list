@@ -1,41 +1,41 @@
-import config from '~/config/database'
+import config from '~/config/database';
 
-import { seed as seedUsers } from '~/database/users'
-import { seed as seedAnimes } from '~/database/animes'
-import { seed as seedAnimeList } from '~/database/anime_list'
+import { seed as seedUsers } from '~/database/users';
+import { seed as seedAnimes } from '~/database/animes';
+import { seed as seedAnimeList } from '~/database/anime_list';
 
-import { Sequelize } from 'sequelize-typescript'
+import { Sequelize } from 'sequelize-typescript';
 
-import { User } from '~/models/user'
-import { Anime } from '~/models/anime'
-import { AnimeList } from '~/models/anime_list'
+import { User } from '~/models/user';
+import { Anime } from '~/models/anime';
+import { AnimeList } from '~/models/anime_list';
 
 const sequelize = new Sequelize({
   ...config,
   models: [User, Anime, AnimeList]
-})
+});
 
 interface Database {
-  seed: () => Promise<void>
-  sync: (foce: boolean) => Promise<void>,
-  close: () => Promise<void>
+  seed: () => Promise<void>;
+  sync: (foce: boolean) => Promise<void>;
+  close: () => Promise<void>;
 }
 
 const database: Database = {
   seed: async () => {
-    await seedUsers()
-    await seedAnimes()
-    await seedAnimeList()
+    await seedUsers();
+    await seedAnimes();
+    await seedAnimeList();
   },
   sync: async (force: boolean) => {
-    await sequelize.sync({ force })
-    sequelize.addModels([User, Anime, AnimeList])
+    await sequelize.sync({ force });
+    sequelize.addModels([User, Anime, AnimeList]);
   },
   close: async () => {
-    await sequelize.close()
+    await sequelize.close();
   }
-}
+};
 
-export default database
+export default database;
 
-export { Sequelize, sequelize }
+export { Sequelize, sequelize };

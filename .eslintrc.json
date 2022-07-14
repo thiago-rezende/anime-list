@@ -3,32 +3,26 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "standard"
-  ],
+  "extends": ["standard"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "rules": {
-    "space-before-function-paren": "off"
+    "space-before-function-paren": "off",
+    "curly": [0, "never"],
+    "semi": [2, "always"]
   },
   "overrides": [
     {
-      "files": [
-        "tests/**/*.ts"
-      ],
+      "files": ["tests/**/*.ts"],
       "env": {
         "jest": true,
         "node": true
       }
     }
   ],
-  "ignorePatterns": [
-    "@types/**/*.d.ts"
-  ]
+  "ignorePatterns": ["@types/**/*.d.ts"]
 }

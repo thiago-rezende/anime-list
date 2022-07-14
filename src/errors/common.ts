@@ -1,66 +1,66 @@
-import { Field } from '~/utils/fields'
+import { Field } from '~/utils/fields';
 
 export class ValidationError extends Error {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'ValidationError'
+    this.name = 'ValidationError';
   }
 }
 
 export class EmailValidationError extends ValidationError {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'EmailValidationError'
+    this.name = 'EmailValidationError';
   }
 }
 
 export class SlugValidationError extends ValidationError {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'SlugValidationError'
+    this.name = 'SlugValidationError';
   }
 }
 
 export class NotFoundError extends Error {
   constructor(message: string) {
-    super(message)
+    super(message);
 
-    this.name = 'NotFoundError'
+    this.name = 'NotFoundError';
   }
 }
 
 export class CreationError extends Error {
-  fields: Array<Field>
+  fields: Array<Field>;
 
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message);
 
-    this.fields = fields
-    this.name = 'CreationError'
+    this.fields = fields;
+    this.name = 'CreationError';
   }
 }
 
 export class UpdateError extends Error {
-  fields: Array<Field>
+  fields: Array<Field>;
 
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message);
 
-    this.fields = fields
-    this.name = 'UpdateError'
+    this.fields = fields;
+    this.name = 'UpdateError';
   }
 }
 
 export class InvalidRequestBodyError extends Error {
-  fields: Array<Field>
+  fields: Array<Field>;
 
   constructor(message: string, fields: Array<Field>) {
-    super(message)
+    super(message);
 
-    this.fields = fields
-    this.name = 'InvalidRequestBodyError'
+    this.fields = fields;
+    this.name = 'InvalidRequestBodyError';
   }
 }

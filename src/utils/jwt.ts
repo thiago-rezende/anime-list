@@ -1,33 +1,39 @@
-import config from '~/config/index'
+import config from '~/config/index';
 
-import { User } from '~/models/user'
-import { userView } from '~/views/users'
+import { User } from '~/models/user';
+import { userView } from '~/views/users';
 
-import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken'
+import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 
 export function createJwt(user: User): string {
   const payload: JwtPayload = {
     user: userView(user)
-  }
+  };
 
-  const accessToken = jwt.sign(payload, { key: config.jwt.privateKey, passphrase: config.jwt.passphrase }, {
-    algorithm: config.jwt.algorithm,
-    expiresIn: config.jwt.expiresIn
-  })
+  const accessToken = jwt.sign(
+    payload,
+    { key: config.jwt.privateKey, passphrase: config.jwt.passphrase },
+    {
+      algorithm: config.jwt.algorithm,
+      expiresIn: config.jwt.expiresIn
+    }
+  );
 
-  return accessToken
+  return accessToken;
 }
 
-export function validateJwt(accessToken: string): JwtPayload | JsonWebTokenError {
+export function validateJwt(
+  accessToken: string
+): JwtPayload | JsonWebTokenError {
   try {
-    return (jwt.verify(accessToken, config.jwt.publicKey) as JwtPayload)
+    return jwt.verify(accessToken, config.jwt.publicKey) as JwtPayload;
   } catch (error) {
-    return error as JsonWebTokenError
+    return error as JsonWebTokenError;
   }
 }
 
 export function getJwtPayload(accessToken: string): JwtPayload {
-  const decoded: JwtPayload = (jwt.decode(accessToken) as JwtPayload)
+  const decoded: JwtPayload = jwt.decode(accessToken) as JwtPayload;
 
-  return { user: decoded.user }
+  return { user: decoded.user };
 }

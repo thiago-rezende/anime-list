@@ -1,98 +1,129 @@
-import { Anime, AnimeDTO } from '~/models/anime'
-import { AnimeCreationError, AnimeNotFoundError, AnimeUpdateError } from '~/errors/anime'
+import { Anime, AnimeDTO } from '~/models/anime';
+import {
+  AnimeCreationError,
+  AnimeNotFoundError,
+  AnimeUpdateError
+} from '~/errors/anime';
 
-import { FindOptions, ValidationError } from 'sequelize/types'
+import { FindOptions, ValidationError } from 'sequelize/types';
 
-export async function getAnime(id: string): Promise<Anime | AnimeNotFoundError> {
-  const anime = await Anime.findByPk(id)
+export async function getAnime(
+  id: string
+): Promise<Anime | AnimeNotFoundError> {
+  const anime = await Anime.findByPk(id);
 
-  if (!anime) return new AnimeNotFoundError('anime not found')
+  if (!anime) return new AnimeNotFoundError('anime not found');
 
-  return anime
+  return anime;
 }
 
-export async function getAnimeBySlug(slug: string): Promise<Anime | AnimeNotFoundError> {
-  const anime = await Anime.findOne({ where: { slug } })
+export async function getAnimeBySlug(
+  slug: string
+): Promise<Anime | AnimeNotFoundError> {
+  const anime = await Anime.findOne({ where: { slug } });
 
-  if (!anime) return new AnimeNotFoundError('anime not found')
+  if (!anime) return new AnimeNotFoundError('anime not found');
 
-  return anime
+  return anime;
 }
 
-export async function findAnime(options: FindOptions): Promise<Anime | AnimeNotFoundError> {
-  const anime = await Anime.findOne(options)
+export async function findAnime(
+  options: FindOptions
+): Promise<Anime | AnimeNotFoundError> {
+  const anime = await Anime.findOne(options);
 
-  if (!anime) return new AnimeNotFoundError('anime not found')
+  if (!anime) return new AnimeNotFoundError('anime not found');
 
-  return anime
+  return anime;
 }
 
-export async function listAnimes(options?: FindOptions): Promise<{ rows: Array<Anime>, count: number }> {
-  const animes = await Anime.findAndCountAll(options)
+export async function listAnimes(
+  options?: FindOptions
+): Promise<{ rows: Array<Anime>; count: number }> {
+  const animes = await Anime.findAndCountAll(options);
 
-  return animes
+  return animes;
 }
 
-export async function createAnime(data: AnimeDTO): Promise<Anime | AnimeCreationError> {
-  const anime = Anime.build({ ...data })
+export async function createAnime(
+  data: AnimeDTO
+): Promise<Anime | AnimeCreationError> {
+  const anime = Anime.build({ ...data });
 
   try {
-    await anime.save()
+    await anime.save();
   } catch (err) {
-    const animeCreationError = new AnimeCreationError('failed on anime creation', [])
+    const animeCreationError = new AnimeCreationError(
+      'failed on anime creation',
+      []
+    );
 
-    const validationError = (err as ValidationError)
+    const validationError = err as ValidationError;
 
-    validationError.errors.forEach(error => {
-      animeCreationError.fields.push({ field: error.path as string, description: error.message })
-    })
+    validationError.errors.forEach((error) => {
+      animeCreationError.fields.push({
+        field: error.path as string,
+        description: error.message
+      });
+    });
 
-    return animeCreationError
+    return animeCreationError;
   }
 
-  return anime
+  return anime;
 }
 
-export async function deleteAnime(id: string): Promise<AnimeNotFoundError | void> {
-  const anime = await Anime.findByPk(id)
+export async function deleteAnime(
+  id: string
+): Promise<AnimeNotFoundError | void> {
+  const anime = await Anime.findByPk(id);
 
-  if (!anime) return new AnimeNotFoundError('anime not found')
+  if (!anime) return new AnimeNotFoundError('anime not found');
 
-  await anime.destroy()
+  await anime.destroy();
 }
 
-export async function updateAnime(id: string, data: AnimeDTO): Promise<AnimeNotFoundError | Anime> {
-  const anime = await Anime.findByPk(id)
+export async function updateAnime(
+  id: string,
+  data: AnimeDTO
+): Promise<AnimeNotFoundError | Anime> {
+  const anime = await Anime.findByPk(id);
 
-  if (!anime) return new AnimeNotFoundError('anime not found')
+  if (!anime) return new AnimeNotFoundError('anime not found');
 
-  const name = data.name
-  const slug = data.slug
-  const native = data.native
-  const romaji = data.romaji
-  const synopsis = data.synopsis
-  const releaseDate = data.releaseDate
+  const name = data.name;
+  const slug = data.slug;
+  const native = data.native;
+  const romaji = data.romaji;
+  const synopsis = data.synopsis;
+  const releaseDate = data.releaseDate;
 
-  if (name) anime.name = name
-  if (slug) anime.slug = slug
-  if (native) anime.native = native
-  if (romaji) anime.romaji = romaji
-  if (synopsis) anime.synopsis = synopsis
-  if (releaseDate) anime.releaseDate = releaseDate
+  if (name) anime.name = name;
+  if (slug) anime.slug = slug;
+  if (native) anime.native = native;
+  if (romaji) anime.romaji = romaji;
+  if (synopsis) anime.synopsis = synopsis;
+  if (releaseDate) anime.releaseDate = releaseDate;
 
   try {
-    await anime.save()
+    await anime.save();
   } catch (err) {
-    const animeUpdateError = new AnimeUpdateError('failed on anime creation', [])
+    const animeUpdateError = new AnimeUpdateError(
+      'failed on anime creation',
+      []
+    );
 
-    const validationError = (err as ValidationError)
+    const validationError = err as ValidationError;
 
-    validationError.errors.forEach(error => {
-      animeUpdateError.fields.push({ field: error.path as string, description: error.message })
-    })
+    validationError.errors.forEach((error) => {
+      animeUpdateError.fields.push({
+        field: error.path as string,
+        description: error.message
+      });
+    });
 
-    return animeUpdateError
+    return animeUpdateError;
   }
 
-  return anime
+  return anime;
 }
