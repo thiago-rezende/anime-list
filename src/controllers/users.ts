@@ -1,5 +1,5 @@
-import { User, UserDTO } from '@models/user'
-import { UserCreationError, UserNotFoundError, UserUpdateError } from '@errors/user'
+import { User, UserDTO } from '~/models/user'
+import { UserCreationError, UserNotFoundError, UserUpdateError } from '~/errors/user'
 
 import { FindOptions, Includeable, ValidationError } from 'sequelize'
 

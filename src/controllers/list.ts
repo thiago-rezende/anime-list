@@ -1,13 +1,13 @@
-import { User } from '@models/user'
-import { Anime } from '@models/anime'
-import { AnimeList, AnimeListDTO } from '@models/anime_list'
+import { User } from '~/models/user'
+import { Anime } from '~/models/anime'
+import { AnimeList, AnimeListDTO } from '~/models/anime_list'
 
 import { FindOptions, ValidationError } from 'sequelize'
-import { UserNotFoundError } from '@errors/user'
-import { AnimeNotFoundError } from '@errors/anime'
-import { getUser } from '@controllers/users'
-import { getAnime } from '@controllers/animes'
-import { CreationError, NotFoundError } from '@errors/common'
+import { UserNotFoundError } from '~/errors/user'
+import { AnimeNotFoundError } from '~/errors/anime'
+import { getUser } from '~/controllers/users'
+import { getAnime } from '~/controllers/animes'
+import { CreationError, NotFoundError } from '~/errors/common'
 
 export async function getAnimeList(user: User, options: FindOptions): Promise<{ rows: Array<AnimeList>, count: number }> {
   options.where = { ...options.where, userId: user.id }

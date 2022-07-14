@@ -1,5 +1,5 @@
-import { User } from '@models/user'
-import { PaginationInfo } from '@utils/pagination'
+import { User } from '~/models/user'
+import { PaginationInfo } from '~/utils/pagination'
 import { Model } from 'sequelize-typescript'
 
 export interface UserView {

@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express'
 
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtoken'
 
-import { AuthenticationError, AuthorizationError } from '@errors/auth'
+import { AuthenticationError, AuthorizationError } from '~/errors/auth'
 
-import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '@errors/common'
+import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '~/errors/common'
 
 const errorMiddleware = function (err: Error, _req: Request, res: Response, next: NextFunction) {
   if (res.headersSent) return next(err)

@@ -1,6 +1,6 @@
-import { AnimeList } from '@models/anime_list'
+import { AnimeList } from '~/models/anime_list'
 import { Model } from 'sequelize-typescript'
-import { PaginationInfo } from '@utils/pagination'
+import { PaginationInfo } from '~/utils/pagination'
 
 export interface AnimeListItemView {
   id: string,

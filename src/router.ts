@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
 
-import v1 from '@routes/v1'
-import auth from '@routes/auth'
+import v1 from '~/routes/v1'
+import auth from '~/routes/auth'
 
 const router = Router()
 

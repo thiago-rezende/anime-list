@@ -1,7 +1,7 @@
-import { createServer } from '@src/server'
-import config from '@config/index'
+import { createServer } from '~/server'
+import config from '~/config'
 
-import database from '@database/index'
+import database from '~/database'
 
 (async () => {
   await database.sync(false)

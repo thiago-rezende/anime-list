@@ -1,4 +1,4 @@
-import { Field } from '@src/utils/fields'
+import { Field } from '~/utils/fields'
 
 export class ValidationError extends Error {
   constructor(message: string) {

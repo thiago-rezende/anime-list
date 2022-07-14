@@ -1,5 +1,5 @@
-import { Anime } from '@models/anime'
-import { PaginationInfo } from '@utils/pagination'
+import { Anime } from '~/models/anime'
+import { PaginationInfo } from '~/utils/pagination'
 import { Model } from 'sequelize-typescript'
 
 export interface AnimeView {

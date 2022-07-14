@@ -1,5 +1,5 @@
-import { Field } from '@utils/fields'
-import { InvalidRequestBodyError } from '@errors/common'
+import { Field } from '~/utils/fields'
+import { InvalidRequestBodyError } from '~/errors/common'
 
 export class AuthenticationError extends Error {
   constructor(message: string) {

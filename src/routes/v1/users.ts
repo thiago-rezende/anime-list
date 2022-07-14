@@ -1,16 +1,16 @@
 import { Router, Request, Response, NextFunction } from 'express'
 
-import { usersView, userView } from '@views/users'
-import { User, UserDTO } from '@models/user'
-import { Anime } from '@models/anime'
-import { InvalidUserRequestBodyError, UserCreationError } from '@errors/user'
-import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from '@controllers/users'
+import { usersView, userView } from '~/views/users'
+import { User, UserDTO } from '~/models/user'
+import { Anime } from '~/models/anime'
+import { InvalidUserRequestBodyError, UserCreationError } from '~/errors/user'
+import { createUser, deleteUser, listUsers, updateUser, getUserByUsername } from '~/controllers/users'
 import { FindOptions, WhereOptions, Op } from 'sequelize'
-import { getPaginationInfo } from '@utils/pagination'
-import { animeListItemView, animeListView } from '@views/list'
-import { addAnimeToList, getAnimeList, removeAnimeFromList } from '@controllers/list'
-import { AnimeList, AnimeListDTO } from '@models/anime_list'
-import { InvalidRequestBodyError } from '@errors/common'
+import { getPaginationInfo } from '~/utils/pagination'
+import { animeListItemView, animeListView } from '~/views/list'
+import { addAnimeToList, getAnimeList, removeAnimeFromList } from '~/controllers/list'
+import { AnimeList, AnimeListDTO } from '~/models/anime_list'
+import { InvalidRequestBodyError } from '~/errors/common'
 
 const users = Router()
 

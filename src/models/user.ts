@@ -1,9 +1,9 @@
 import { Table, Column, Model, Unique, PrimaryKey, IsUUID, Default, DataType, Is, BelongsToMany } from 'sequelize-typescript'
 
-import { email as emailRegex } from '@utils/regex'
-import { EmailValidationError } from '@errors/common'
-import { Anime } from '@models/anime'
-import { AnimeList } from '@models/anime_list'
+import { email as emailRegex } from '~/utils/regex'
+import { EmailValidationError } from '~/errors/common'
+import { Anime } from '~/models/anime'
+import { AnimeList } from '~/models/anime_list'
 
 function emailValidator(value: string) {
   if (!emailRegex.test(value)) { throw new EmailValidationError('invalid email address') }

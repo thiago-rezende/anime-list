@@ -1,5 +1,5 @@
-import { Field } from '@utils/fields'
-import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '@errors/common'
+import { Field } from '~/utils/fields'
+import { CreationError, InvalidRequestBodyError, NotFoundError, UpdateError } from '~/errors/common'
 
 export class UserNotFoundError extends NotFoundError {
   constructor(message: string) {

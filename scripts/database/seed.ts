@@ -1,5 +1,5 @@
-import database, { sequelize } from '@database/index'
-import config from '@config/database'
+import database, { sequelize } from '~/database/index'
+import config from '~/config/database'
 
 import { DatabaseError } from 'sequelize'
 

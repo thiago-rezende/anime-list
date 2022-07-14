@@ -1,7 +1,6 @@
 import express, { Express } from 'express'
 
-import authMiddleware from '@middlewares/auth'
-import errorMiddleware from '@middlewares/error'
+import { authMiddleware, errorMiddleware } from '~/middlewares'
 
 import router from './router'
 

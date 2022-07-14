@@ -1,11 +1,11 @@
 import request from 'supertest'
 
-import { createServer } from '@src/server'
+import { createServer } from '~/server'
 
-import database from '@database/index'
-import { users } from '@database/users'
+import database from '~/database/index'
+import { users } from '~/database/users'
 
-import { User } from '@models/user'
+import { User } from '~/models/user'
 
 const server = createServer()
 

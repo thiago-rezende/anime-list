@@ -1,6 +1,6 @@
-import env, { EnvironmentConfig } from '@config/environment'
-import jwt, { JwtConfig } from '@config/jwt'
-import db, { DBConfig } from '@config/database'
+import env, { EnvironmentConfig } from '~/config/environment'
+import jwt, { JwtConfig } from '~/config/jwt'
+import db, { DBConfig } from '~/config/database'
 
 export interface Config {
   env: EnvironmentConfig,

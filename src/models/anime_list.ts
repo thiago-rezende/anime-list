@@ -1,7 +1,7 @@
 import { Table, Column, Model, PrimaryKey, IsUUID, Default, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript'
 
-import { User } from '@models/user'
-import { Anime } from '@models/anime'
+import { User } from '~/models/user'
+import { Anime } from '~/models/anime'
 
 @Table({
   tableName: 'list'

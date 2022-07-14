@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
 
-import users from '@routes/v1/users'
-import animes from '@routes/v1/animes'
+import users from '~/routes/v1/users'
+import animes from '~/routes/v1/animes'
 
 const v1 = Router()
 

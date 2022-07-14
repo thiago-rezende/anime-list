@@ -1,5 +1,5 @@
-import { Anime, AnimeDTO } from '@models/anime'
-import { AnimeCreationError, AnimeNotFoundError, AnimeUpdateError } from '@errors/anime'
+import { Anime, AnimeDTO } from '~/models/anime'
+import { AnimeCreationError, AnimeNotFoundError, AnimeUpdateError } from '~/errors/anime'
 
 import { FindOptions, ValidationError } from 'sequelize/types'
 

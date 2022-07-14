@@ -1,10 +1,10 @@
 import { Table, Column, Model, PrimaryKey, IsUUID, Default, DataType, Unique, Is, BelongsToMany } from 'sequelize-typescript'
 
-import { slug as slugRegex } from '@utils/regex'
-import { SlugValidationError } from '@errors/common'
+import { slug as slugRegex } from '~/utils/regex'
+import { SlugValidationError } from '~/errors/common'
 
-import { User } from '@models/user'
-import { AnimeList } from '@models/anime_list'
+import { User } from '~/models/user'
+import { AnimeList } from '~/models/anime_list'
 
 function slugValidator(value: string) {
   if (!slugRegex.test(value)) { throw new SlugValidationError('slug should only have alphanumeric letters, numbers and hyphens') }

@@ -1,10 +1,10 @@
-import { validateJwt } from '@utils/jwt'
+import { validateJwt } from '~/utils/jwt'
 import { Request, Response, NextFunction } from 'express'
 
-import { AuthenticationError } from '@errors/auth'
+import { AuthenticationError } from '~/errors/auth'
 
-import { getUser } from '@controllers/users'
-import { UserNotFoundError } from '@errors/user'
+import { getUser } from '~/controllers/users'
+import { UserNotFoundError } from '~/errors/user'
 
 import { JsonWebTokenError } from 'jsonwebtoken'
 

@@ -2,13 +2,13 @@ import { Router, Request, Response, NextFunction } from 'express'
 
 import { FindOptions, Op, WhereOptions } from 'sequelize'
 
-import { getPaginationInfo } from '@utils/pagination'
+import { getPaginationInfo } from '~/utils/pagination'
 
-import { Anime, AnimeDTO } from '@models/anime'
-import { createAnime, deleteAnime, getAnimeBySlug, listAnimes, updateAnime } from '@controllers/animes'
-import { animesView, animeView } from '@views/animes'
+import { Anime, AnimeDTO } from '~/models/anime'
+import { createAnime, deleteAnime, getAnimeBySlug, listAnimes, updateAnime } from '~/controllers/animes'
+import { animesView, animeView } from '~/views/animes'
 
-import { AnimeCreationError, InvalidAnimeRequestBodyError } from '@errors/anime'
+import { AnimeCreationError, InvalidAnimeRequestBodyError } from '~/errors/anime'
 
 const animes = Router()
 

@@ -1,7 +1,7 @@
-import config from '@config/index'
+import config from '~/config/index'
 
-import { User } from '@models/user'
-import { userView } from '@views/users'
+import { User } from '~/models/user'
+import { userView } from '~/views/users'
 
 import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken'
 

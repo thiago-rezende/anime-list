@@ -1,4 +1,4 @@
-import { Anime } from '@models/anime'
+import { Anime } from '~/models/anime'
 
 let animes: Array<Anime> = []
 

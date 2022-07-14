@@ -1,14 +1,14 @@
 import request from 'supertest'
 
-import { createServer } from '@src/server'
+import { createServer } from '~/server'
 
-import database from '@database/index'
-import { users } from '@database/users'
-import { animes } from '@database/animes'
+import database from '~/database/index'
+import { users } from '~/database/users'
+import { animes } from '~/database/animes'
 
-import { User } from '@models/user'
-import { Anime } from '@models/anime'
-import { AnimesView } from '@views/animes'
+import { User } from '~/models/user'
+import { Anime } from '~/models/anime'
+import { AnimesView } from '~/views/animes'
 
 const server = createServer()
 

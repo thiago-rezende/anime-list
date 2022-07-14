@@ -1,6 +1,6 @@
-import { Sequelize } from '@database/index'
+import { Sequelize } from '~/database/index'
 
-import config from '@config/database'
+import config from '~/config/database'
 
 import { Dialect } from 'sequelize'
 

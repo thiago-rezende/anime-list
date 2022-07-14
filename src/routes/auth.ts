@@ -1,16 +1,16 @@
 import { Router, Request, Response, NextFunction } from 'express'
 
-import { userView } from '@views/users'
+import { userView } from '~/views/users'
 
-import { createJwt } from '@utils/jwt'
+import { createJwt } from '~/utils/jwt'
 
-import { InvalidAuthRequestBodyError, InvalidCredentialsError } from '@errors/auth'
+import { InvalidAuthRequestBodyError, InvalidCredentialsError } from '~/errors/auth'
 
-import { User } from '@models/user'
+import { User } from '~/models/user'
 
-import { UserNotFoundError } from '@errors/user'
+import { UserNotFoundError } from '~/errors/user'
 
-import { findUser } from '@controllers/users'
+import { findUser } from '~/controllers/users'
 
 const auth = Router()
 

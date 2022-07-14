@@ -1,7 +1,7 @@
-import { AnimeList } from '@models/anime_list'
+import { AnimeList } from '~/models/anime_list'
 
-import { users } from '@database/users'
-import { animes } from '@database/animes'
+import { users } from '~/database/users'
+import { animes } from '~/database/animes'
 
 let animeList: Array<AnimeList> = []
 

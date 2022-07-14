@@ -1,5 +1,5 @@
-import { sequelize } from '@database/index'
-import config from '@config/database'
+import { sequelize } from '~/database/index'
+import config from '~/config/database'
 
 (async () => {
   console.log(`[database] <drop> dropping '${config.database}' database`)
