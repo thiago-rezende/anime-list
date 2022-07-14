@@ -5,6 +5,15 @@
 ## [Unreleased]
 
 
+## [v1.3.1]
+ - [010b8a7] docs: update version number (Thiago Rezende)
+ - [838c934] chore: add keywords to package.json (Thiago Rezende)
+ - [95bb93c] ci: removed unnecessary install step from jobs (Thiago Rezende)
+ - [7c5f70c] revert: moved runner config back to jobs (Thiago Rezende)
+ - [053dfc3] ci: move runner config to global scope (Thiago Rezende)
+ - [cacab2c] chore: update package naming (Thiago Rezende)
+ - [aeb1924] docs: update changelog (Thiago Rezende)
+
 ## [v1.3.0]
  - [0fa25e0] docs: update version number (Thiago Rezende)
  - [a892e0c] style: update code styling config (Thiago Rezende)
