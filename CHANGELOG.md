@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+
+## [v1.3.0]
+ - [0fa25e0] docs: update version number (Thiago Rezende)
+ - [a892e0c] style: update code styling config (Thiago Rezende)
  - [09c3620] chore: update tsconfig (Thiago Rezende)
  - [f749691] test: fix jest tsconfig (Thiago Rezende)
  - [df574c0] chore: add tsconfig to scripts folder (Thiago Rezende)
