@@ -9,14 +9,16 @@
   "private": true,
   "scripts": {
     "watch": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --quiet --transpile-only src/index.ts",
+    "keys:generate": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/keys.ts generate",
     "db:create": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/create.ts",
     "db:drop": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/drop.ts",
     "db:sync": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/sync.ts",
     "db:seed": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/database/seed.ts",
+    "start:ts": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
     "db:setup": "yarn db:drop && yarn db:create && yarn db:sync && yarn db:seed",
-    "keys:generate": "ts-node -r dotenv/config -r tsconfig-paths/register scripts/keys.ts generate",
-    "start": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
     "test": "jest --setupFiles dotenv/config --verbose --silent --runInBand",
+    "start": "node -r dotenv/config dist/index.js",
+    "build": "tsc && resolve-tspaths",
     "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
@@ -35,6 +37,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "jest": "^28.1.1",
     "reflect-metadata": "^0.1.13",
+    "resolve-tspaths": "^0.7.0",
     "supertest": "^6.2.3",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.1",
