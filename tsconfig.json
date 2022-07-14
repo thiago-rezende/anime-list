@@ -9,7 +9,8 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "typeRoots": [
-      "@types"
+      "@types",
+      "node_modules/@types"
     ],
     "baseUrl": ".",
     "paths": {
