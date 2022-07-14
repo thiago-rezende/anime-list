@@ -38,9 +38,6 @@ jobs:
           node-version: 18
           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: yarn install
-
       - name: Generate Certificates
         run: yarn keys:generate
 
@@ -60,9 +57,6 @@ jobs:
         with:
           node-version: 18
           cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn install
 
       - name: Run ESLint
         run: yarn lint
