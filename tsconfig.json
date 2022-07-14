@@ -4,11 +4,9 @@
     "lib": [
       "ESNext"
     ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "module": "CommonJS",
-    "rootDir": "src",
     "outDir": "dist",
+    "rootDir": "src",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "typeRoots": [
       "@types"
@@ -35,17 +33,15 @@
     "noImplicitOverride": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "useUnknownInCatchVariables": true,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "strictPropertyInitialization": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "tests",
-    "scripts"
   ]
 }
