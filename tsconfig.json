@@ -6,7 +6,6 @@
     "rootDir": "src",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "typeRoots": ["@types", "node_modules/@types"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
