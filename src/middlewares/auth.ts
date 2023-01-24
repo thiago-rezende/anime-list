@@ -13,6 +13,7 @@ const authMiddleware = async function (
   _res: Response,
   next: NextFunction
 ) {
+  if (req.path === '/') return next();
   if (req.path === '/auth') return next();
   if (req.method === 'POST' && req.path === '/v1/users') return next();
   if (req.method === 'POST' && req.path === '/v1/animes') return next();
