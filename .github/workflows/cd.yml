@@ -26,4 +26,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            bash /home/horus/services/anime-list/scripts/deploy.sh"
+            bash /home/horus/services/anime-list/scripts/deploy.sh
