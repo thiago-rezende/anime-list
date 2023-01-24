@@ -14,7 +14,6 @@ services:
   anime-list:
     build:
       context: .
-    user: 1000:1000
     environment:
       - PASSPHRASE=${PASSPHRASE}
       - WATCH_FILES=${WATCH_FILES}
