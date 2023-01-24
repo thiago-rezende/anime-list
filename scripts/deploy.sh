@@ -12,6 +12,8 @@ success() {
   exit 0
 }
 
+git pull
+
 docker compose down
 
 if [[ $? -ne 0 ]]; then
@@ -38,11 +40,7 @@ fi
 
 docker compose up -d
 
-if [[ $? -ne 0 ]]; then
-  failure
-fi
-
-~/services/scripts/healthcheck.sh 5 https://anime-list.horus.wtf/
+~/services/scripts/healthcheck.sh 10 https://anime-list.horus.wtf/
 
 if [[ $? -ne 0 ]]; then
   failure
