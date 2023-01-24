@@ -12,6 +12,8 @@ success() {
   exit 0
 }
 
+cd /home/horus/services/anime-list
+
 git pull
 
 docker compose down
