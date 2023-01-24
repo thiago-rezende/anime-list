@@ -7,7 +7,7 @@ x-logging: &default-logging
     max-file: '1'
 
 networks:
-  shared-services:
+  services:
     external: true
 
 services:
@@ -30,4 +30,4 @@ services:
       - '.:/application'
     logging: *default-logging
     networks:
-      - shared-services
+      - services
