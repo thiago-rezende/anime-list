@@ -7,14 +7,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup SSH
-        run: |
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          host='${{ vars.SERVER_URL }}'
-          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
-          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+      # - name: Setup SSH
+      #   run: |
+      #     install -m 600 -D /dev/null ~/.ssh/id_rsa
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #     host='${{ vars.SERVER_URL }}'
+      #     hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+      #     ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+
+      # - name: Trigger Deploy
+      #   run: |
+      #     ssh -i ~/.ssh/id_rsa horus@${{ vars.SERVER_URL }} "cd /home/horus/services/anime-list ; bash -s < /home/horus/services/anime-list/scripts/deploy.sh"
 
       - name: Trigger Deploy
-        run: |
-          ssh -i ~/.ssh/id_rsa horus@${{ vars.SERVER_URL }} "cd /home/horus/services/anime-list ; bash -s < /home/horus/services/anime-list/scripts/deploy.sh"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            bash /home/horus/services/anime-list/scripts/deploy.sh"
