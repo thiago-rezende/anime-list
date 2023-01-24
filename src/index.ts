@@ -4,7 +4,7 @@ import config from '~/config';
 import database from '~/database';
 (async () => {
   await database.sync(false);
-  await database.seed();
+  /* await database.seed(); */
 })();
 
 const server = createServer();

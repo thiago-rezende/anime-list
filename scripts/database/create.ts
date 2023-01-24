@@ -16,10 +16,9 @@ import { Dialect } from 'sequelize';
 
   await sequelize
     .getQueryInterface()
-    .createDatabase(config.database as string, {
-      charset: 'utf32',
-      collate: 'utf32_general_ci'
-    });
+    .createDatabase(
+      config.database as string /*, { charset: 'utf32', collate: 'utf32_general_ci' } */
+    );
 
   await sequelize.close();
 })();
