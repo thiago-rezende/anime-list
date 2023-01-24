@@ -17,4 +17,4 @@ jobs:
 
       - name: Trigger Deploy
         run: |
-          ssh -t ${{ vars.SERVER_URL }} "cd /home/horus/services/anime-list ; bash -s < /home/horus/services/anime-list/scripts/deploy.sh"
+          ssh -i ~/.ssh/id_rsa ${{ vars.SERVER_URL }} "cd /home/horus/services/anime-list ; bash -s < /home/horus/services/anime-list/scripts/deploy.sh"
